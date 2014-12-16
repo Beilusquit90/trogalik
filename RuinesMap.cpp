@@ -23,7 +23,7 @@ RuinesMap::RuinesMap()
 
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
-	//vBody = rhs.vBody;
+	vBody = rhs.vBody;
 	for (int i = 0; i < 15; i++)
 	for (int j = 0; j < 15; j++)
 	{
@@ -174,8 +174,16 @@ int RuinesMap::Draw( )
 	for (int i = 0; i < 15; i++)
 	for (int j = 0; j < 15; j++)
 	{
-		if (levelSize[j][i] !=0)
+		if (levelSize[j][i] != 0)
 		{
+			switch (levelSize[j][i])
+			{
+			case 1:glColor3f(0.9, 0.3, 0.1); break;
+			case 2:glColor3f(0.2, 0.2, 0.5); break;
+			case 3:glColor3f(0.7, 0.3, 0.8); break;
+			case 4:glColor3f(0.2, 0.1, 0.7); break;
+			case 9:glColor3f(0.7, 0.6, 0.7); break;
+			}
 			glVertex2f(i*z, j*z);
 			glVertex2f(i*z + z, j*z + z);
 		}

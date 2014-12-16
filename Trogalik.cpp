@@ -11,10 +11,10 @@
 #include "Shambala.h"
 
 
-RuinesMap * xxx;
+Shambala * xxx;
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
-int ts = 1000;
+int ts = 300;
 //const int xSize = 15;
 //const int ySize = 15;
 
@@ -27,7 +27,7 @@ int _tmain(int argc, char **argv)
 {
 	srand(time(NULL));   
 	//RuinesMap x(1);
-	RuinesMap x;
+	Shambala x;
 	xxx=&x;
 	
 	glutInit(&argc, argv);
