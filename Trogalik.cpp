@@ -14,7 +14,7 @@
 Shambala * xxx;
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
-int ts = 300;
+int ts = 100;
 //const int xSize = 15;
 //const int ySize = 15;
 

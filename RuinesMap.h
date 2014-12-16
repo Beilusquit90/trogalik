@@ -17,6 +17,7 @@ public:
 	void rMove(Body&x);
 	int Move(int x, int y,Body*rhs);
 	void test();
+	void CreateLvl();
 	
 private:
 	int levelSize[15][15];

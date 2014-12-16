@@ -11,7 +11,7 @@ RuinesMap::RuinesMap()
 	for (int i = 0; i < 15; i++)
 	for (int j = 0; j < 15; j++)
 		levelSize[i][j] = 0;
-
+	CreateLvl();
 	int temp = (rand() % 6) + 5;
 	for (int i = 0; i < temp; i++)
 	{
@@ -48,7 +48,7 @@ RuinesMap::RuinesMap(int _lvl)
 	for (int i = 0; i < 15; i++)
 	for (int j = 0; j < 15; j++)
 		levelSize[i][j] = 0;
-
+	CreateLvl();
 	int temp = (rand() % 6) + 5;
 	for (int i = 0; i < temp; i++)
 	{
@@ -65,7 +65,7 @@ RuinesMap::~RuinesMap()
 
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
-	std::cout << levelSize[x][y] << std::endl;
+	//std::cout << levelSize[x][y] << std::endl;
 	if (x >= 0 && x<15)
 	if (y >= 0 && y<15)
 	{	
@@ -75,7 +75,6 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 			rhs->cx = x;
 			rhs->cy = y;
 			levelSize[rhs->cx][rhs->cy] = rhs->role;
-			std::cout << "Move work..." << std::endl;
 			return 1;
 		}
 	}
@@ -89,6 +88,16 @@ void RuinesMap::test()
 		{
 			std::cout << levelSize[i][j];
 		}std::cout << std::endl;
+	}
+}
+
+void RuinesMap::CreateLvl()
+{
+	for (int x = 0; x < 15;x++)
+	for (int y = 0; y < 15; y++)
+	{
+		if (x == 0||x==14)	levelSize[x][y] = 999;
+		if (y == 0||y==14)	levelSize[x][y] = 999;
 	}
 }
 
@@ -116,7 +125,6 @@ void RuinesMap::rMove(Body&x) // заставляет убогих, совершать рандомное движение
 			}
 			if (i == 0) j++;
 		}
-			test();
 }
 
 
@@ -142,7 +150,6 @@ void RuinesMap::NewMapMan()
 
 int RuinesMap::Activ( )
 {
-	std::cout << "RuinesMap::ACTIVE" << std::endl;
 	for (auto &act : vBody)
 	{
 		rMove(act);
@@ -152,7 +159,6 @@ return 0;
 
 int RuinesMap::Draw( )
 {
-	std::cout << "RuinesMap::Draw" << std::endl;
 	glBegin(GL_LINES);
 	glColor3f(0.6, 0.4, 0.6);
 	int x = 0, y = 0;
@@ -183,9 +189,21 @@ int RuinesMap::Draw( )
 			case 3:glColor3f(0.7, 0.3, 0.8); break;
 			case 4:glColor3f(0.2, 0.1, 0.7); break;
 			case 9:glColor3f(0.7, 0.6, 0.7); break;
+			case 999:glColor3f(1, 1, 0); 
+			
+			
+				
+				
+				break;
 			}
-			glVertex2f(i*z, j*z);
-			glVertex2f(i*z + z, j*z + z);
+			for (int count = 0; count < z; count++)
+			{
+				for (int count2 = 0; count2 < z; count2++)
+				{
+					glVertex2f(i*z, j*z);
+					glVertex2f(i*z + count, j*z + count2);
+				}
+			}
 		}
 	}
 	glEnd();

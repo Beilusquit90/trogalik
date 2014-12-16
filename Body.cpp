@@ -26,7 +26,7 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем статы, в зав
 		if (i == 3)str++;
 		if (i == 4)intel++;
 	}
-	std::cout << "HP:" << hp << "  Ag:" << ag << "  Str" << str << "  Intelect:" << intel << lvl << "  role" << role << std::endl;
+	std::cout << "HP:" << hp << "  Ag:" << ag << "  Str" << str << "  Intelect:" << intel << "  role" << role << std::endl;
 }
 
 

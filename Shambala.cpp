@@ -5,7 +5,7 @@
 Shambala::Shambala()
 {
 	
-	TheSeed.push_back(RuinesMap(5));
+	TheSeed.push_back(RuinesMap(45));
 	flag = 1;
 }
 
