@@ -104,42 +104,55 @@ void RuinesMap::CreateLvl()
 
 void RuinesMap::rMove(Body&x) // заставляет убогих, совершать рандомное движение. На крайний случай, anotherMove
 {
-			for (int i = 0, j = 0; i < 1;)
+	for (int i = 0, j = 0; i < 1;)
 		{
 			if (j > 8)
 			{
-				//anotherMove(); i = 1;
+				x.tiktak+=4;
 			}
 			int temp = rand() % 8;
 			switch (temp)
 			{
-			case 0: Move(x.cx, x.cy + 1,&x);		i = 1; break;  // вроде вверх
-			case 1: Move(x.cx + 1, x.cy + 1,&x);	i = 1; break;
-			case 2: Move(x.cx + 1, x.cy,&x);		i = 1;  break;
-			case 3: Move(x.cx + 1, x.cy - 1,&x);	i = 1; break;
-			case 4: Move(x.cx, x.cy - 1, &x);		i = 1; break;
-			case 5: Move(x.cx - 1, x.cy - 1, &x);	i = 1; break;
-			case 6: Move(x.cx - 1, x.cy, &x);		i = 1; break;
-			case 7: Move(x.cx - 1, x.cy + 1, &x);	i = 1; break;
+			case 0: Move(x.cx, x.cy + 1, &x);			x.tiktak += x.moveS;	i = 1; break;  // вроде вверх
+			case 1: Move(x.cx + 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
+			case 2: Move(x.cx + 1, x.cy, &x);			x.tiktak += x.moveS;	i = 1;  break;
+			case 3: Move(x.cx + 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
+			case 4: Move(x.cx, x.cy - 1, &x);			x.tiktak += x.moveS;	i = 1; break;
+			case 5: Move(x.cx - 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
+			case 6: Move(x.cx - 1, x.cy, &x);				x.tiktak += x.moveS; i = 1; break;
+			case 7: Move(x.cx - 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
 			default:						break;
 			}
-			if (i == 0) j++;
 		}
 }
+
+
+int RuinesMap::Activ( )
+{
+	for (auto &act : vBody)
+	{	
+		if (act.tiktak <= 0)
+			rMove(act);
+		else
+			act.tiktak -= 0.2;
+	}
+return 0;
+}
+
 
 
 
 void RuinesMap::NewMapMan()
 {
-	int i = 1, cx, cy,role;
-	for (; ;)
+	int i = 1, cx, cy, role;
+	for (;;)
 	{
 		cx = rand() % 15;
 		cy = rand() % 15;
 		if (levelSize[cx][cy] == 0)
 		{
 			std::cout << "x" << cx << "   y" << cy << std::endl;
-			vBody.push_back(Body(role,cx, cy, lvl));
+			vBody.push_back(Body(role, cx, cy, lvl));
 			levelSize[cx][cy] = role;
 			break;
 		}
@@ -147,15 +160,6 @@ void RuinesMap::NewMapMan()
 	std::cout << "Gj man. New kid has ben planted in our map" << std::endl;
 }
 
-
-int RuinesMap::Activ( )
-{
-	for (auto &act : vBody)
-	{
-		rMove(act);
-	}
-return 0;
-}
 
 int RuinesMap::Draw( )
 {
@@ -189,12 +193,7 @@ int RuinesMap::Draw( )
 			case 3:glColor3f(0.7, 0.3, 0.8); break;
 			case 4:glColor3f(0.2, 0.1, 0.7); break;
 			case 9:glColor3f(0.7, 0.6, 0.7); break;
-			case 999:glColor3f(1, 1, 0); 
-			
-			
-				
-				
-				break;
+			case 999:glColor3f(1, 1, 0);	 break;
 			}
 			for (int count = 0; count < z; count++)
 			{
