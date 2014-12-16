@@ -11,16 +11,16 @@ public:
 	~Shambala();
 	void Draw() 
 	{
-		for (auto x : TheSeed)
+		for (auto &x : TheSeed)
 		{
-			x.Draw(flag);
+			x.Draw();
 		}
 	}
 	void Activ()
 	{
-		for (auto x : TheSeed)
+		for (auto &x : TheSeed)
 		{
-			x.Activ(flag);
+			x.Activ();
 		}
 	}
 private:

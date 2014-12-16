@@ -4,20 +4,12 @@ class RuinesMap;
 class Body
 {
 public:
-	Body();
-	Body(int lvl, RuinesMap &_rm);// получает в качестве параметра левел на котором ГГ, что бы расчитать статы мобов.
-	Body(int lvl, RuinesMap*_rm);
-	~Body();
+	Body(int&_role,int x, int y, int lvl);// получает в качестве параметра левел на котором ГГ, что бы расчитать статы мобов.
 	Body(const Body&rhs);
-	void operator=(Body&rhs);
-	void NewMapMan(); // отвечает за выбор места для жизы на мапе
-	int move(int x, int y); // по сути,  сейчас сделаю что бы эта шляпа движуху мутила
-	void dMap(); //удаляет с карты инфу по своим координатам.
-	void sMap(); // ну вы поняли.
-	void test();
-	void rMove();
-	void anotherMove(){};
-private:
+	~Body();
+	void operator=(const Body&rhs);
+
+	int role;
 	int hp;
 	int ag;
 	int str;
@@ -25,8 +17,6 @@ private:
 	int cx;
 	int cy;
 	int tiktak;
-	int role;
-	RuinesMap * rm;
 };
 
 
