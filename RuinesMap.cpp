@@ -5,16 +5,18 @@
 #include <gl\glut.h>
 
 
-RuinesMap::RuinesMap() : levelSize[15][15]({ 0 })
+RuinesMap::RuinesMap()
 {
 	lvl = 1;
-	
+
 	int temp = (rand() % 6) + 5;
 	for (int i = 0; i < temp; i++)
 	{
 		vBody.push_back(Body(lvl, (*this)));
 	}
-	
+	for (int i = 0; i < 15; i++)
+	for (int j = 0; j < 15; j++)
+		levelSize[i][j] = 0;
 	//std::cout << vBody.size() << "SIZE lvl " << 1 << std::endl;
 }
 
@@ -39,14 +41,14 @@ void RuinesMap::operator=(RuinesMap&rhs)
 	lvl = rhs.lvl;
 }
 
-RuinesMap::RuinesMap(int _lvl) 
+RuinesMap::RuinesMap(int _lvl)
 {
 	lvl = _lvl;
 	for (int i = 0; i < 15; i++)
 	for (int j = 0; j < 15; j++)
 		levelSize[i][j] = 0;
 	int temp = (rand() % 6) + 5;
-	for (int i = 0; i < temp;i++)
+	for (int i = 0; i < temp; i++)
 	{
 		vBody.push_back(Body(lvl, (*this)));
 	}
@@ -65,6 +67,7 @@ int RuinesMap::Activ(int flag)
 	{
 		act.rMove();
 	}
+	return 0;
 }
 
 int RuinesMap::Draw(int flag)
@@ -72,9 +75,9 @@ int RuinesMap::Draw(int flag)
 	if (flag != lvl)return 0;
 	glBegin(GL_LINES);
 	glColor3f(0.6, 0.4, 0.6);
-	int x=0, y=0;
+	int x = 0, y = 0;
 
-	int z=800/15;
+	int z = 800 / 15;
 
 	for (; x < 800; x += z)
 	{
@@ -90,14 +93,15 @@ int RuinesMap::Draw(int flag)
 		glVertex2f(800, y);
 	}
 
-	for (int i=0; i < 15;i++)
-	for (int j=0; j < 15; j++)
+	for (int i = 0; i < 15; i++)
+	for (int j = 0; j < 15; j++)
 	{
 		if (levelSize[j][i] == 1)
 		{
 			glVertex2f(i*z, j*z);
-			glVertex2f(i*z+z, j*z+z);
+			glVertex2f(i*z + z, j*z + z);
 		}
 	}
 	glEnd();
+	return 0;
 }
