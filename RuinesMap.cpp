@@ -8,8 +8,8 @@
 RuinesMap::RuinesMap()
 {
 	lvl = 1;
-	for (int i = 0; i < 15; i++)
-	for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++)
+	for (int j = 0; j < 50; j++)
 		levelSize[i][j] = 0;
 	CreateLvl();
 	int temp = (rand() % 6) + 5;
@@ -24,8 +24,8 @@ RuinesMap::RuinesMap()
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
 	vBody = rhs.vBody;
-	for (int i = 0; i < 15; i++)
-	for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++)
+	for (int j = 0; j < 50; j++)
 	{
 		levelSize[i][j] = rhs.levelSize[i][j];
 	}
@@ -35,8 +35,8 @@ RuinesMap::RuinesMap(const RuinesMap&rhs)
 
 void RuinesMap::operator=(RuinesMap&rhs)
 {
-	for (int i = 0; i < 15; i++)
-	for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++)
+	for (int j = 0; j < 50; j++)
 		levelSize[j][i] = rhs.levelSize[j][i];
 	lvl = rhs.lvl;
 	test();
@@ -45,8 +45,8 @@ void RuinesMap::operator=(RuinesMap&rhs)
 RuinesMap::RuinesMap(int _lvl)
 {
 	lvl = _lvl;
-	for (int i = 0; i < 15; i++)
-	for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++)
+	for (int j = 0; j < 50; j++)
 		levelSize[i][j] = 0;
 	CreateLvl();
 	int temp = (rand() % 6) + 5;
@@ -66,8 +66,8 @@ RuinesMap::~RuinesMap()
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
 	//std::cout << levelSize[x][y] << std::endl;
-	if (x >= 0 && x<15)
-	if (y >= 0 && y<15)
+	if (x >= 0 && x<50)
+	if (y >= 0 && y<50)
 	{	
 		if (levelSize[x][y] == 0)	//проверка на свободный путь.
 		{
@@ -83,8 +83,8 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 
 void RuinesMap::test()
 {
-	for (int i = 0; i < 15; i++){
-		for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++){
+		for (int j = 0; j < 50; j++)
 		{
 			std::cout << levelSize[i][j];
 		}std::cout << std::endl;
@@ -93,11 +93,11 @@ void RuinesMap::test()
 
 void RuinesMap::CreateLvl()
 {
-	for (int x = 0; x < 15;x++)
-	for (int y = 0; y < 15; y++)
+	for (int x = 0; x < 50;x++)
+	for (int y = 0; y < 50; y++)
 	{
-		if (x == 0||x==14)	levelSize[x][y] = 999;
-		if (y == 0||y==14)	levelSize[x][y] = 999;
+		if (x == 0||x==49)	levelSize[x][y] = 999;
+		if (y == 0||y==49)	levelSize[x][y] = 999;
 	}
 }
 
@@ -140,15 +140,33 @@ return 0;
 }
 
 
-
+void RuinesMap::SetMyHero(Body&MyLovelyHero)
+{
+	MyLovelyHero.role = 9;
+	int i = 1, cx, cy;
+		 
+	for (;;)
+	{
+		cx = rand() % 50;
+		cy = rand() % 50;
+		if (levelSize[cx][cy] == 0)
+		{
+			std::cout << "x" << cx << "   y" << cy << std::endl;
+			levelSize[cx][cy] = MyLovelyHero.role;
+			MyLovelyHero.cx = cx;
+			MyLovelyHero.cy = cy;
+			break;
+		}
+	}
+}
 
 void RuinesMap::NewMapMan()
 {
 	int i = 1, cx, cy, role;
 	for (;;)
 	{
-		cx = rand() % 15;
-		cy = rand() % 15;
+		cx = rand() % 50;
+		cy = rand() % 50;
 		if (levelSize[cx][cy] == 0)
 		{
 			std::cout << "x" << cx << "   y" << cy << std::endl;
@@ -167,7 +185,7 @@ int RuinesMap::Draw( )
 	glColor3f(0.6, 0.4, 0.6);
 	int x = 0, y = 0;
 
-	int z = 800 / 15;
+	int z = 800 / 50;
 
 	for (; x < 800; x += z)
 	{
@@ -181,8 +199,8 @@ int RuinesMap::Draw( )
 		glVertex2f(0, y);
 		glVertex2f(800, y);
 	}
-	for (int i = 0; i < 15; i++)
-	for (int j = 0; j < 15; j++)
+	for (int i = 0; i < 50; i++)
+	for (int j = 0; j < 50; j++)
 	{
 		if (levelSize[j][i] != 0)
 		{

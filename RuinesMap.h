@@ -18,9 +18,10 @@ public:
 	int Move(int x, int y,Body*rhs);
 	void test();
 	void CreateLvl();
+	void SetMyHero(Body&MyLovelyHero);
 	
 private:
-	int levelSize[15][15];
+	int levelSize[50][50];
 	std::list<Body>vBody;
 	int lvl;
 };

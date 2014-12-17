@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "RuinesMap.h"
+int flags = 0;
 
 Body::Body()
 {
@@ -121,14 +122,14 @@ void Body::sKoef()
 {
 
 	
-	colldownS=(50-intel/2)*0.01;				// скорость на колдунство.
-	attackS = (50 - (ag / 2))*0.01;		// скорость физ атаки.
+	colldownS = (50 - intel / 2)*0.01;						// скорость на колдунство.
+	attackS = (50 - (ag / 2))*0.01;						// скорость физ атаки.
 	fizCDS = (100 - ((ag / 4) + (str / 4)))*0.01;		// скорость физ умений.
 	moveS = (50 - (ag / 4) + (hp / 7))*0.01;			// скорость ходьбы.
-	rundiagonalS=moveS*1.5;			// скорость ходьбы на искосок.
-	meditationS = 0.50;					// скорость медитации восстановления маны и хп.
-	shotS = (70 - (ag / 2))*0.01;					// выстрела скорость.
-	jumpSpeed = (70 - (ag / 2))*0.01;				// скорость прыжка назад или вперед.
+	rundiagonalS = moveS*1.5;								// скорость ходьбы на искосок.
+	meditationS = 0.50;									// скорость медитации восстановления маны и хп.
+	shotS = (70 - (ag / 2))*0.01;						// выстрела скорость.
+	jumpSpeed = (70 - (ag / 2))*0.01;					// скорость прыжка назад или вперед.
 
 	std::cout << colldownS << "colldownS" << std::endl;
 	std::cout << attackS << "attackS" << std::endl;

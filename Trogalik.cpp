@@ -10,21 +10,23 @@
 #include "RuinesMap.h"
 #include "Shambala.h"
 
-
+extern int flags;
 Shambala * xxx;
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
-int ts = 100;
+int ts = 50;
+int flagK;
 //const int xSize = 15;
 //const int ySize = 15;
 
 void Draw();
 void initialize();
 void Timer(int x);
-
+void SKeyboard(int keyx, int x, int y);
 
 int _tmain(int argc, char **argv)
 {
+	
 	srand(time(NULL));   
 	//RuinesMap x(1);
 	Shambala x;
@@ -42,7 +44,7 @@ int _tmain(int argc, char **argv)
 	glutTimerFunc(ts, Timer, 0);      // по€сн€ем н€шке глуту, что эту функцию юзаем дл€ анимации
 
 //	glutKeyboardFunc(Keyboard);
-//	glutSpecialFunc(SKeyboard);
+	glutSpecialFunc(SKeyboard);
 
 	glutMainLoop();
 	return 0;
@@ -75,4 +77,15 @@ void Timer(int x)
 	xxx->Activ();
 	Draw();
 	glutTimerFunc(ts, Timer, 0);
+}
+
+void SKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
+{// вс€кие ф11 и прочие юзабельные клавиши
+	switch (keyx)
+	{
+	case GLUT_KEY_LEFT: if (flags == 0){ flags= 3; }	break;	//влево
+	case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
+	case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
+	case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
+	}
 }

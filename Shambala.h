@@ -1,30 +1,21 @@
 #pragma once
-#include <list>
+#include <vector>
 #include "RuinesMap.h"
-
-
+#include <iostream>
 
 class Shambala
 {
 public:
 	Shambala();
 	~Shambala();
-	void Draw() 
-	{
-		for (auto &x : TheSeed)
-		{
-			x.Draw();
-		}
-	}
-	void Activ()
-	{
-		for (auto &x : TheSeed)
-		{
-			x.Activ();
-		}
-	}
+	void SetMyHero();
+	void Draw();
+	int Activ();
+	void DrawHero();
+	void HeroSteps();
 private:
-	std::list<RuinesMap>TheSeed;
+	std::vector<RuinesMap>TheSeed;
 	int flag;
+	Body MyLovelyHero;
 };
 
