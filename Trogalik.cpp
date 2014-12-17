@@ -1,5 +1,5 @@
-// Trogalik.cpp: определяет точку входа для консольного приложения.
-//
+п»ї// Trogalik.cpp: РѕРїСЂРµРґРµР»СЏРµС‚ С‚РѕС‡РєСѓ РІС…РѕРґР° РґР»СЏ РєРѕРЅСЃРѕР»СЊРЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
+// С‚РµСЃС‚РёРј С‡РёС‚Р°Р±РµР»СЊРЅС‹Рµ РєРѕРјРµРЅС‚С‹ РґР»СЏ РІР°СЃ СЂСЂС‹Р±СЏС‚РєРё
 
 #include "stdafx.h"
 #include <iostream>
@@ -12,8 +12,8 @@
 
 extern int flags;
 Shambala * xxx;
-int wWidth = 800;    //высота
-int wHeight = 800;    //ширина
+int wWidth = 800;    //РІС‹СЃРѕС‚Р°
+int wHeight = 800;    //С€РёСЂРёРЅР°
 int ts = 50;
 int flagK;
 //const int xSize = 15;
@@ -33,15 +33,15 @@ int _tmain(int argc, char **argv)
 	xxx=&x;
 	
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // два буфера, 24-битный цвет ргб
-	glutInitWindowSize(wWidth, wHeight);           //Размер
-	glutInitWindowPosition(100, 200);        // позиция окна.
-	glutCreateWindow("Trollguelike.");      // создал окно с именем
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // РґРІР° Р±СѓС„РµСЂР°, 24-Р±РёС‚РЅС‹Р№ С†РІРµС‚ СЂРіР±
+	glutInitWindowSize(wWidth, wHeight);           //Р Р°Р·РјРµСЂ
+	glutInitWindowPosition(100, 200);        // РїРѕР·РёС†РёСЏ РѕРєРЅР°.
+	glutCreateWindow("Trollguelike.");      // СЃРѕР·РґР°Р» РѕРєРЅРѕ СЃ РёРјРµРЅРµРј
 	initialize();
 
-	glViewport(0, wHeight, 0, wWidth);       //Отвечает за то, какая область окна перерисовывается, то есть размер такой же как у окна
-	glutDisplayFunc(Draw);    //  если ты свернул приложение и развернул, вот чтобы появилась картинка, программа вызывает функцию draw, где идет отрисовка
-	glutTimerFunc(ts, Timer, 0);      // поясняем няшке глуту, что эту функцию юзаем для анимации
+	glViewport(0, wHeight, 0, wWidth);       //РћС‚РІРµС‡Р°РµС‚ Р·Р° С‚Рѕ, РєР°РєР°СЏ РѕР±Р»Р°СЃС‚СЊ РѕРєРЅР° РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµС‚СЃСЏ, С‚Рѕ РµСЃС‚СЊ СЂР°Р·РјРµСЂ С‚Р°РєРѕР№ Р¶Рµ РєР°Рє Сѓ РѕРєРЅР°
+	glutDisplayFunc(Draw);    //  РµСЃР»Рё С‚С‹ СЃРІРµСЂРЅСѓР» РїСЂРёР»РѕР¶РµРЅРёРµ Рё СЂР°Р·РІРµСЂРЅСѓР», РІРѕС‚ С‡С‚РѕР±С‹ РїРѕСЏРІРёР»Р°СЃСЊ РєР°СЂС‚РёРЅРєР°, РїСЂРѕРіСЂР°РјРјР° РІС‹Р·С‹РІР°РµС‚ С„СѓРЅРєС†РёСЋ draw, РіРґРµ РёРґРµС‚ РѕС‚СЂРёСЃРѕРІРєР°
+	glutTimerFunc(ts, Timer, 0);      // РїРѕСЏСЃРЅСЏРµРј РЅСЏС€РєРµ РіР»СѓС‚Сѓ, С‡С‚Рѕ СЌС‚Сѓ С„СѓРЅРєС†РёСЋ СЋР·Р°РµРј РґР»СЏ Р°РЅРёРјР°С†РёРё
 
 //	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(SKeyboard);
@@ -52,7 +52,7 @@ int _tmain(int argc, char **argv)
 
 
 
-void initialize() //говорящее название
+void initialize() //РіРѕРІРѕСЂСЏС‰РµРµ РЅР°Р·РІР°РЅРёРµ
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
@@ -61,7 +61,7 @@ void initialize() //говорящее название
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void Draw() //говорящее название
+void Draw() //РіРѕРІРѕСЂСЏС‰РµРµ РЅР°Р·РІР°РЅРёРµ
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1.0, 1.0, 1.0);
@@ -69,7 +69,7 @@ void Draw() //говорящее название
 	//  Setka();
 	xxx->Draw();
 	glLoadIdentity();
-	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера
+	glutSwapBuffers(); // С‚Р° Р¶Рµ С…РµСЂРЅСЏ С‡С‚Рѕ Рё С„Р»СѓС€, РЅРѕ РґР»СЏ РґРІРѕР№РЅРѕРіРѕ Р±СѓС„РµСЂР°
 }
 
 void Timer(int x)
@@ -79,13 +79,13 @@ void Timer(int x)
 	glutTimerFunc(ts, Timer, 0);
 }
 
-void SKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
-{// всякие ф11 и прочие юзабельные клавиши
+void SKeyboard(int keyx, int x, int y)// РёРєСЃ Рё РёРіСЂРёРє, СЌС‚Рѕ РєРѕРѕСЂРґРёРЅР°С‚С‹ РјС‹С€РєРё.
+{// РІСЃСЏРєРёРµ С„11 Рё РїСЂРѕС‡РёРµ СЋР·Р°Р±РµР»СЊРЅС‹Рµ РєР»Р°РІРёС€Рё
 	switch (keyx)
 	{
-	case GLUT_KEY_LEFT: if (flags == 0){ flags= 3; }	break;	//влево
-	case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
-	case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
-	case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
+	case GLUT_KEY_LEFT: if (flags == 0){ flags= 3; }	break;	//РІР»РµРІРѕ
+	case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//РІРїСЂР°РІРѕ
+	case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//РІРЅРёР·
+	case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//РІРІРµСЂС…
 	}
 }
