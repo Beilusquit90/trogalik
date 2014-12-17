@@ -14,11 +14,12 @@ RuinesMap::RuinesMap()
 		levelSize[i][j] = 0;
 	CreateLvl();
 	int temp = (rand() % 6) + 5;
+	std::cout << "TEMPO" << temp << std::endl;
 	for (int i = 0; i < temp; i++)
 	{
 		NewMapMan();
 	}
-	test();
+	//test();
 }
 
 
@@ -31,7 +32,7 @@ RuinesMap::RuinesMap(const RuinesMap&rhs)
 		levelSize[i][j] = rhs.levelSize[i][j];
 	}
 	lvl = rhs.lvl;
-	test();
+	//test();
 }
 
 void RuinesMap::operator=(RuinesMap&rhs)
@@ -40,7 +41,7 @@ void RuinesMap::operator=(RuinesMap&rhs)
 	for (int j = 0; j < 50; j++)
 		levelSize[j][i] = rhs.levelSize[j][i];
 	lvl = rhs.lvl;
-	test();
+	//test();
 }
 
 RuinesMap::RuinesMap(int _lvl)
@@ -50,23 +51,28 @@ RuinesMap::RuinesMap(int _lvl)
 	for (int j = 0; j < 50; j++)
 		levelSize[i][j] = 0;
 	CreateLvl();
-	int temp = (rand() % 6) + 5;
+	int temp = (rand() % 6) + 15;
 	for (int i = 0; i < temp; i++)
 	{
 		NewMapMan();
 	}
-	test();
+	//test();
 }
 
 
 RuinesMap::~RuinesMap()
 {
-	std::cout << "RuinesMAp DIE`S..." << std::endl;
+	//std::cout << "RuinesMAp DIE`S..." << std::endl;
 }
 
 void RuinesMap::Attack(int _x, int _y, Body*rhs)
 {
 	int count=0;
+	if (levelSize[_x][_y] == 9)
+	{
+		MyHero->hp -= rhs->str;
+		
+	}
 	for (auto &x : vBody)
 	{
 		if (x.cx == _x&&x.cy == _y)
@@ -76,11 +82,6 @@ void RuinesMap::Attack(int _x, int _y, Body*rhs)
 		}
 		count++;
 	}
-	
-	for (auto &act : vBody)
-	{
-		std::cout << act.hp << " " << std::endl;
-	}
 }
 
 int RuinesMap::Move(int x,int y,Body*rhs)
@@ -89,6 +90,7 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 	if (x >= 0 && x<50)
 	if (y >= 0 && y<50)
 	{	
+		if (levelSize[x][y] == 999) return 0;
 		if (levelSize[x][y] == 0)	//проверка на свободный путь.
 		{
 			levelSize[rhs->cx][rhs->cy] = 0;
@@ -100,8 +102,13 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 		else
 		if (rhs->role == 9)
 		{
-			if (levelSize[x][y] == 999) return 0;
-			else
+			Attack(x, y, rhs);
+				return 1;
+		
+		}
+		else
+		{
+			if (levelSize[x][y] == 9)
 			{
 				Attack(x, y, rhs);
 				return 1;
@@ -123,12 +130,15 @@ void RuinesMap::test()
 
 void RuinesMap::CreateLvl()
 {
-	for (int x = 0; x < 50;x++)
+	for (int x = 0; x < 50; x++)
 	for (int y = 0; y < 50; y++)
 	{
-		if (x == 0||x==49)	levelSize[x][y] = 999;
-		if (y == 0||y==49)	levelSize[x][y] = 999;
+		levelSize[x][y] = 999;
 	}
+
+	MapGen();
+	test();
+	std::cout << "MAP GEN FINISH" << std::endl;
 }
 
 
@@ -193,8 +203,9 @@ return 0;
 
 void RuinesMap::SetMyHero(Body&MyLovelyHero)
 {
+	MyHero = &MyLovelyHero;
 	MyLovelyHero.role = 9;
-	MyLovelyHero.hp = 1000;
+	//MyLovelyHero.hp = 1000;
 	int i = 1, cx, cy;
 		 
 	for (;;)
@@ -239,18 +250,6 @@ int RuinesMap::Draw( )
 
 	int z = 800 / 50;
 
-	for (; x < 800; x += z)
-	{
-		glVertex2f(x, 0);
-		glVertex2f(x, 800);
-	}
-
-	x = 0;
-	for (; y < 800; y += z)
-	{
-		glVertex2f(0, y);
-		glVertex2f(800, y);
-	}
 	for (int i = 0; i < 50; i++)
 	for (int j = 0; j < 50; j++)
 	{
@@ -274,7 +273,56 @@ int RuinesMap::Draw( )
 				}
 			}
 		}
+
 	}
 	glEnd();
 	return 0;
+}
+
+
+void RuinesMap::MapGen()
+{
+	int sizeMap = 50; // пометка для себя. Добавь эти сраные константные магические числа чувак... в ручную не айс.
+	int x, y;
+		int temp = rand() % 6+10;	// рандомно выбираем количество комнат.
+	for (int count = 0; count<temp; count++)
+	{
+		int rSizex = rand() % 10 +7 ; // размер по оси икс и игрик, делаем от 2 до 8.
+		int rSizey = rand() % 10 +7; 
+		
+		x = rand() % sizeMap;			//выбираем рандомную точку на карте, для создания комнаты.
+		y = rand() % sizeMap;
+		
+		int tempxpp;				//будет хранить наибольную координату икс
+		int tempxmm;				//будет хранить наименьшую координату икс
+		int tempypp;				//будет хранить наибольную координату игрик
+		int tempymm;				//будет хранить наименьшую координату игрик
+		if ((x - (rSizex / 2)) <= 0) tempxmm = 1;	// если комната хочет выйти за предел, обрезаем её.
+		else tempxmm = (x - (rSizex / 2));			//если нет, то выдаем ей значение 
+		if ((x + (rSizex / 2)) >= sizeMap - 1) tempxpp = sizeMap - 1;
+		else tempxpp = (x + (rSizex / 2));
+		if ((y - (rSizey / 2)) <= 0) tempymm = 1; 
+		else tempymm = y - (rSizex / 2);
+		if ((y + (rSizey / 2)) >= sizeMap) tempypp = sizeMap - 1;
+		else tempypp = y + (rSizex / 2);
+
+		std::cout << rSizex / 2 << std::endl;
+
+		
+
+		for (int i = tempxmm; i < tempxpp; i++)
+		for (int j = tempymm; j < tempypp; j++)
+		{
+			levelSize[i][j] = 0;
+		}
+		std::cout << "Room created!!!!!!!!!!!!!!!!" << std::endl;
+	}
+
+
+	for (int c1 = 0; c1 < sizeMap; c1++)
+	for (int c2 = 0; c2 < sizeMap; c2++)
+	{
+		if (c1 == 0 || c1 == sizeMap - 1 || c2 == 0 || c2 == sizeMap - 1)
+			levelSize[c1][c2] = 999;
+	}
 }

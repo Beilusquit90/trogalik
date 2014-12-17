@@ -26,7 +26,7 @@ Body::Body()
 		if (i == 4)intel++;
 	}
 	sKoef();
-	std::cout << "STANDART CONSTRUCTOR"<< std::endl;
+	//std::cout << "STANDART CONSTRUCTOR"<< std::endl;
 
 }
 
@@ -57,7 +57,7 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем �
 		if (i == 4)intel++;
 	}
 	sKoef();
-	std::cout << "HP:" << hp << "  Ag:" << ag << "  Str" << str << "  Intelect:" << intel << "  role" << role << std::endl;
+	/*std::cout << "HP:" << hp << "  Ag:" << ag << "  Str" << str << "  Intelect:" << intel << "  role" << role << std::endl;
 	std::cout << colldownS << "colldownS" << std::endl;
 	std::cout << attackS << "attackS" << std::endl;
 	std::cout << fizCDS << "fizCDS" << std::endl;
@@ -66,7 +66,8 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем �
 	std::cout << meditationS << "meditationS" << std::endl;
 	std::cout << shotS << "shotS" << std::endl;
 	std::cout << jumpSpeed << "jumpSpeed" << std::endl;
-}
+	*/
+	}
 
 
 
@@ -92,8 +93,7 @@ Body::Body(const Body&rhs)
 
 Body::~Body()
 {
-	std::cout << "BODY DIE`S..." << std::endl;
-
+//	std::cout << "BODY DIE`S..." << std::endl;
 }
 
 void Body::operator=(const Body&rhs)
@@ -131,7 +131,7 @@ void Body::sKoef()
 	shotS = (70 - (ag / 2))*0.01;						// выстрела скорость.
 	jumpSpeed = (70 - (ag / 2))*0.01;					// скорость прыжка назад или вперед.
 
-	std::cout << colldownS << "colldownS" << std::endl;
+/*	std::cout << colldownS << "colldownS" << std::endl;
 	std::cout << attackS << "attackS" << std::endl;
 	std::cout << fizCDS << "fizCDS" << std::endl;
 	std::cout << moveS << "moveS" << std::endl;
@@ -139,5 +139,5 @@ void Body::sKoef()
 	std::cout << meditationS << "meditationS" << std::endl;
 	std::cout << shotS << "shotS" << std::endl;
 	std::cout << jumpSpeed << "jumpSpeed" << std::endl;
-
+	*/
 }

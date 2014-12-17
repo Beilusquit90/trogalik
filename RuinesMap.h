@@ -21,10 +21,11 @@ public:
 	void SetMyHero(Body&MyLovelyHero);
 	void Attack(int x,int y,Body*rhs);
 	void WhoDie();
-	
+	void MapGen();
 private:
 	int levelSize[50][50];
 	std::vector<Body>vBody;
 	int lvl;
+	Body *MyHero;
 };
 

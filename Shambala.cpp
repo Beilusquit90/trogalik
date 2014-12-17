@@ -2,12 +2,10 @@
 #include "stdafx.h"
 #include "Shambala.h"
 #include <gl\glut.h>
-
 extern int flags;
 
 Shambala::Shambala()
 {
-	
 	TheSeed.push_back(RuinesMap(1));
 	flag = 1;
 	SetMyHero();
@@ -27,6 +25,8 @@ void Shambala::SetMyHero()
 int Shambala::Activ()
 {
 	TheSeed[0].WhoDie();
+	if (MyLovelyHero.hp <= 0)
+		return 0;
 	for (auto &x : TheSeed)
 	{
 		if (MyLovelyHero.tiktak <= 0)
@@ -71,8 +71,10 @@ void Shambala::DrawHero()  //раскоменчу это, когда герой 
 
 void Shambala::HeroSteps()
 {
-	if (flags == 1){ TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy + 1, &MyLovelyHero); flags = 0; MyLovelyHero.tiktak += MyLovelyHero.moveS; }
-	if (flags == 2){ TheSeed[0].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; MyLovelyHero.tiktak += MyLovelyHero.moveS; }
-	if (flags == 3){ TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0;  MyLovelyHero.tiktak += MyLovelyHero.moveS; }
-	if (flags == 4){ TheSeed[0].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0;  MyLovelyHero.tiktak += MyLovelyHero.moveS; }
+	int temp = 0;
+	if (flags == 1){ temp = TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy + 1, &MyLovelyHero); flags = 0; }
+	if (flags == 2){ temp = TheSeed[0].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
+	if (flags == 3){ temp = TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0; }
+	if (flags == 4){ temp = TheSeed[0].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
+	if (temp == 1){ MyLovelyHero.tiktak += MyLovelyHero.moveS; }
 }
