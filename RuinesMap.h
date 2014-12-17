@@ -1,5 +1,5 @@
-#pragma once
-#include <list>
+﻿#pragma once
+#include <vector>
 #include "Body.h"
 
 class RuinesMap
@@ -19,10 +19,12 @@ public:
 	void test();
 	void CreateLvl();
 	void SetMyHero(Body&MyLovelyHero);
+	void Attack(int x,int y,Body*rhs);
+	void WhoDie();
 	
 private:
 	int levelSize[50][50];
-	std::list<Body>vBody;
+	std::vector<Body>vBody;
 	int lvl;
 };
 

@@ -1,4 +1,4 @@
-// сделал читабельные комменты
+п»ї// СЃРґРµР»Р°Р» С‡РёС‚Р°Р±РµР»СЊРЅС‹Рµ РєРѕРјРјРµРЅС‚С‹
 #include "stdafx.h"
 #include "RuinesMap.h"
 #include <vector>
@@ -64,19 +64,48 @@ RuinesMap::~RuinesMap()
 	std::cout << "RuinesMAp DIE`S..." << std::endl;
 }
 
+void RuinesMap::Attack(int _x, int _y, Body*rhs)
+{
+	int count=0;
+	for (auto &x : vBody)
+	{
+		if (x.cx == _x&&x.cy == _y)
+		{
+			vBody[count].hp -= rhs->str;
+			std::cout << "ATTACK" << std::endl;
+		}
+		count++;
+	}
+	
+	for (auto &act : vBody)
+	{
+		std::cout << act.hp << " " << std::endl;
+	}
+}
+
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
 	//std::cout << levelSize[x][y] << std::endl;
 	if (x >= 0 && x<50)
 	if (y >= 0 && y<50)
 	{	
-		if (levelSize[x][y] == 0)	//проверка на свободный путь.
+		if (levelSize[x][y] == 0)	//РїСЂРѕРІРµСЂРєР° РЅР° СЃРІРѕР±РѕРґРЅС‹Р№ РїСѓС‚СЊ.
 		{
 			levelSize[rhs->cx][rhs->cy] = 0;
 			rhs->cx = x;
 			rhs->cy = y;
 			levelSize[rhs->cx][rhs->cy] = rhs->role;
 			return 1;
+		}
+		else
+		if (rhs->role == 9)
+		{
+			if (levelSize[x][y] == 999) return 0;
+			else
+			{
+				Attack(x, y, rhs);
+				return 1;
+			}
 		}
 	}
 	return 0;
@@ -103,7 +132,7 @@ void RuinesMap::CreateLvl()
 }
 
 
-void RuinesMap::rMove(Body&x) // заставляет убогих, совершать рандомное движение. На крайний случай, anotherMove
+void RuinesMap::rMove(Body&x) // Р·Р°СЃС‚Р°РІР»СЏРµС‚ СѓР±РѕРіРёС…, СЃРѕРІРµСЂС€Р°С‚СЊ СЂР°РЅРґРѕРјРЅРѕРµ РґРІРёР¶РµРЅРёРµ. РќР° РєСЂР°Р№РЅРёР№ СЃР»СѓС‡Р°Р№, anotherMove
 {
 	for (int i = 0, j = 0; i < 1;)
 		{
@@ -114,23 +143,44 @@ void RuinesMap::rMove(Body&x) // заставляет убогих, совершать рандомное движение
 			int temp = rand() % 8;
 			switch (temp)
 			{
-			case 0: Move(x.cx, x.cy + 1, &x);			x.tiktak += x.moveS;	i = 1; break;  // вроде вверх
-			case 1: Move(x.cx + 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
-			case 2: Move(x.cx + 1, x.cy, &x);			x.tiktak += x.moveS;	i = 1;  break;
-			case 3: Move(x.cx + 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
-			case 4: Move(x.cx, x.cy - 1, &x);			x.tiktak += x.moveS;	i = 1; break;
-			case 5: Move(x.cx - 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
-			case 6: Move(x.cx - 1, x.cy, &x);				x.tiktak += x.moveS; i = 1; break;
-			case 7: Move(x.cx - 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS; i = 1; break;
+			case 0: i = Move(x.cx, x.cy + 1, &x);			x.tiktak += x.moveS;	 break;  // РІСЂРѕРґРµ РІРІРµСЂС…
+			case 1: i = Move(x.cx + 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS;; break;
+			case 2: i = Move(x.cx + 1, x.cy, &x);			x.tiktak += x.moveS;	 break;
+			case 3: i = Move(x.cx + 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS;  break;
+			case 4: i = Move(x.cx, x.cy - 1, &x);			x.tiktak += x.moveS;	 break;
+			case 5: i = Move(x.cx - 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS;  break;
+			case 6: i = Move(x.cx - 1, x.cy, &x);				x.tiktak += x.moveS; break;
+			case 7: i = Move(x.cx - 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS;  break;
 			default:						break;
 			}
 		}
 }
 
+void RuinesMap::WhoDie()
+{
+	int dFlag = 0;
+	int count = 0;
+	for (auto &x:vBody)
+	{
+		if (x.hp <= 0)
+		{
+			levelSize[x.cx][x.cy] = 0;
+			dFlag = 1;
+			break;
+		}
+		count++;
+	}
+	if (dFlag==1)
+	{		vBody.erase(vBody.begin() + count);
+		std::cout << "ONE DIE NOW!!!" << std::endl;
+		dFlag = 0;
+	}
+
+}
 
 int RuinesMap::Activ( )
 {
-	for (auto &act : vBody)
+		for (auto &act : vBody)
 	{	
 		if (act.tiktak <= 0)
 			rMove(act);
@@ -144,6 +194,7 @@ return 0;
 void RuinesMap::SetMyHero(Body&MyLovelyHero)
 {
 	MyLovelyHero.role = 9;
+	MyLovelyHero.hp = 1000;
 	int i = 1, cx, cy;
 		 
 	for (;;)

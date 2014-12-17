@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include "Body.h"
 #include <iostream>
 #include <stdlib.h>
@@ -8,7 +8,7 @@ int flags = 0;
 Body::Body()
 {
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
-	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
+	switch (role = rand() % 3 + 1) // 1 РІРѕРёРЅ. 2 Р»СѓС‡РЅРёРє . 3 РјР°Рі.
 	{
 	case 1:str += 2;   break;
 	case 2:ag += 2;    break;
@@ -16,7 +16,7 @@ Body::Body()
 	}
 
 	
-	int temp = 1 + rand() % 6;		// задаем рандомную надбавку на статы. =)
+	int temp = 1 + rand() % 6;		// Р·Р°РґР°РµРј СЂР°РЅРґРѕРјРЅСѓСЋ РЅР°РґР±Р°РІРєСѓ РЅР° СЃС‚Р°С‚С‹. =)
 	for (int count = 0; count < temp; count++)
 	{
 		int i = rand() % 4 + 1;
@@ -36,10 +36,10 @@ Body::Body(Body *rhs){
 
 
 
-Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем статы, в зависимости от уровня подземелья.
+Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //СЂР°СЃРєРёРґС‹РІР°РµРј СЃС‚Р°С‚С‹, РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СѓСЂРѕРІРЅСЏ РїРѕРґР·РµРјРµР»СЊСЏ.
 {
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
-	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
+	switch (role = rand() % 3 + 1) // 1 РІРѕРёРЅ. 2 Р»СѓС‡РЅРёРє . 3 РјР°Рі.
 	{
 	case 1:str += 2;   break;
 	case 2:ag += 2;    break;
@@ -47,7 +47,7 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем статы, в зав
 	}
 	
 	_role = role;
-	int temp = lvl + rand()%6;		// задаем рандомную надбавку на статы.
+	int temp = lvl + rand()%6;		// Р·Р°РґР°РµРј СЂР°РЅРґРѕРјРЅСѓСЋ РЅР°РґР±Р°РІРєСѓ РЅР° СЃС‚Р°С‚С‹.
 	for (int count = 0; count < temp; count++)
 	{
 		int i=rand() % 4 + 1;
@@ -78,16 +78,16 @@ Body::Body(const Body&rhs)
 	intel = rhs.intel;
 	cx = rhs.cx;
 	cy = rhs.cy;
-	tiktak = rhs.tiktak;		//Таймер... от него зависит то, сколько ты пропустишь.
+	tiktak = rhs.tiktak;		//РўР°Р№РјРµСЂ... РѕС‚ РЅРµРіРѕ Р·Р°РІРёСЃРёС‚ С‚Рѕ, СЃРєРѕР»СЊРєРѕ С‚С‹ РїСЂРѕРїСѓСЃС‚РёС€СЊ.
 	role = rhs.role;
-	colldownS = rhs.colldownS; // скорость на колдунство.
-	attackS = rhs.attackS; // скорость физ атаки.
-	fizCDS=rhs.fizCDS;	// скорость физ умений.
-	moveS=rhs.moveS; // скорость ходьбы.
-	rundiagonalS = rhs.rundiagonalS; // скорость ходьбы на искосок.
-	meditationS = rhs.meditationS;  // скорость медитации восстановления маны и хп.
-	shotS=rhs.shotS;  // выстрела скорость.
-	jumpSpeed=rhs.jumpSpeed; // скорость прыжка назад или вперед.
+	colldownS = rhs.colldownS; // СЃРєРѕСЂРѕСЃС‚СЊ РЅР° РєРѕР»РґСѓРЅСЃС‚РІРѕ.
+	attackS = rhs.attackS; // СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· Р°С‚Р°РєРё.
+	fizCDS=rhs.fizCDS;	// СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· СѓРјРµРЅРёР№.
+	moveS=rhs.moveS; // СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹.
+	rundiagonalS = rhs.rundiagonalS; // СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹ РЅР° РёСЃРєРѕСЃРѕРє.
+	meditationS = rhs.meditationS;  // СЃРєРѕСЂРѕСЃС‚СЊ РјРµРґРёС‚Р°С†РёРё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РјР°РЅС‹ Рё С…Рї.
+	shotS=rhs.shotS;  // РІС‹СЃС‚СЂРµР»Р° СЃРєРѕСЂРѕСЃС‚СЊ.
+	jumpSpeed=rhs.jumpSpeed; // СЃРєРѕСЂРѕСЃС‚СЊ РїСЂС‹Р¶РєР° РЅР°Р·Р°Рґ РёР»Рё РІРїРµСЂРµРґ.
 }
 
 Body::~Body()
@@ -104,16 +104,16 @@ void Body::operator=(const Body&rhs)
 	intel = rhs.intel;
 	cx = rhs.cx;
 	cy = rhs.cy;
-	tiktak = rhs.tiktak;		//Таймер... от него зависит то, сколько ты пропустишь.
+	tiktak = rhs.tiktak;		//РўР°Р№РјРµСЂ... РѕС‚ РЅРµРіРѕ Р·Р°РІРёСЃРёС‚ С‚Рѕ, СЃРєРѕР»СЊРєРѕ С‚С‹ РїСЂРѕРїСѓСЃС‚РёС€СЊ.
 	role = rhs.role;
-	colldownS = rhs.colldownS; // скорость на колдунство.
-	attackS = rhs.attackS; // скорость физ атаки.
-	fizCDS = rhs.fizCDS;	// скорость физ умений.
-	moveS = rhs.moveS; // скорость ходьбы.
-	rundiagonalS = rhs.rundiagonalS; // скорость ходьбы на искосок.
-	meditationS = rhs.meditationS;  // скорость медитации восстановления маны и хп.
-	shotS = rhs.shotS;  // выстрела скорость.
-	jumpSpeed = rhs.jumpSpeed; // скорость прыжка назад или вперед.
+	colldownS = rhs.colldownS; // СЃРєРѕСЂРѕСЃС‚СЊ РЅР° РєРѕР»РґСѓРЅСЃС‚РІРѕ.
+	attackS = rhs.attackS; // СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· Р°С‚Р°РєРё.
+	fizCDS = rhs.fizCDS;	// СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· СѓРјРµРЅРёР№.
+	moveS = rhs.moveS; // СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹.
+	rundiagonalS = rhs.rundiagonalS; // СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹ РЅР° РёСЃРєРѕСЃРѕРє.
+	meditationS = rhs.meditationS;  // СЃРєРѕСЂРѕСЃС‚СЊ РјРµРґРёС‚Р°С†РёРё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РјР°РЅС‹ Рё С…Рї.
+	shotS = rhs.shotS;  // РІС‹СЃС‚СЂРµР»Р° СЃРєРѕСЂРѕСЃС‚СЊ.
+	jumpSpeed = rhs.jumpSpeed; // СЃРєРѕСЂРѕСЃС‚СЊ РїСЂС‹Р¶РєР° РЅР°Р·Р°Рґ РёР»Рё РІРїРµСЂРµРґ.
 
 }
 
@@ -122,14 +122,14 @@ void Body::sKoef()
 {
 
 	
-	colldownS = (50 - intel / 2)*0.01;						// скорость на колдунство.
-	attackS = (50 - (ag / 2))*0.01;						// скорость физ атаки.
-	fizCDS = (100 - ((ag / 4) + (str / 4)))*0.01;		// скорость физ умений.
-	moveS = (50 - (ag / 4) + (hp / 7))*0.01;			// скорость ходьбы.
-	rundiagonalS = moveS*1.5;								// скорость ходьбы на искосок.
-	meditationS = 0.50;									// скорость медитации восстановления маны и хп.
-	shotS = (70 - (ag / 2))*0.01;						// выстрела скорость.
-	jumpSpeed = (70 - (ag / 2))*0.01;					// скорость прыжка назад или вперед.
+	colldownS = (50 - intel / 2)*0.01;						// СЃРєРѕСЂРѕСЃС‚СЊ РЅР° РєРѕР»РґСѓРЅСЃС‚РІРѕ.
+	attackS = (50 - (ag / 2))*0.01;						// СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· Р°С‚Р°РєРё.
+	fizCDS = (100 - ((ag / 4) + (str / 4)))*0.01;		// СЃРєРѕСЂРѕСЃС‚СЊ С„РёР· СѓРјРµРЅРёР№.
+	moveS = (50 - (ag / 4) + (hp / 7))*0.01;			// СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹.
+	rundiagonalS = moveS*1.5;								// СЃРєРѕСЂРѕСЃС‚СЊ С…РѕРґСЊР±С‹ РЅР° РёСЃРєРѕСЃРѕРє.
+	meditationS = 0.50;									// СЃРєРѕСЂРѕСЃС‚СЊ РјРµРґРёС‚Р°С†РёРё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РјР°РЅС‹ Рё С…Рї.
+	shotS = (70 - (ag / 2))*0.01;						// РІС‹СЃС‚СЂРµР»Р° СЃРєРѕСЂРѕСЃС‚СЊ.
+	jumpSpeed = (70 - (ag / 2))*0.01;					// СЃРєРѕСЂРѕСЃС‚СЊ РїСЂС‹Р¶РєР° РЅР°Р·Р°Рґ РёР»Рё РІРїРµСЂРµРґ.
 
 	std::cout << colldownS << "colldownS" << std::endl;
 	std::cout << attackS << "attackS" << std::endl;

@@ -1,4 +1,4 @@
-// сделал читабельные комменты
+п»ї
 #include "stdafx.h"
 #include "Shambala.h"
 #include <gl\glut.h>
@@ -26,6 +26,7 @@ void Shambala::SetMyHero()
 
 int Shambala::Activ()
 {
+	TheSeed[0].WhoDie();
 	for (auto &x : TheSeed)
 	{
 		if (MyLovelyHero.tiktak <= 0)
@@ -49,7 +50,7 @@ void Shambala::Draw()
 	}
 }
 /*
-void Shambala::DrawHero()  //раскоменчу это, когда герой будет отрисовываться текстуркой.
+void Shambala::DrawHero()  //СЂР°СЃРєРѕРјРµРЅС‡Сѓ СЌС‚Рѕ, РєРѕРіРґР° РіРµСЂРѕР№ Р±СѓРґРµС‚ РѕС‚СЂРёСЃРѕРІС‹РІР°С‚СЊСЃСЏ С‚РµРєСЃС‚СѓСЂРєРѕР№.
 {
 	MyLovelyHero.cx;
 	MyLovelyHero.cy;

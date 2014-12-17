@@ -1,5 +1,5 @@
 ﻿// Trogalik.cpp: определяет точку входа для консольного приложения.
-// тестим читабельные коменты для вас ррыбятки
+
 
 #include "stdafx.h"
 #include <iostream>
@@ -14,7 +14,7 @@ extern int flags;
 Shambala * xxx;
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
-int ts = 50;
+int ts = 70;
 int flagK;
 //const int xSize = 15;
 //const int ySize = 15;
