@@ -33,7 +33,7 @@ int Shambala::Activ()
 			return 0;
 		}
 		else
-			MyLovelyHero.tiktak -= 0.03;
+			MyLovelyHero.tiktak -= 0.2;
 		x.Activ();
 	}
 	return 0;
@@ -73,5 +73,4 @@ void Shambala::HeroSteps()
 	if (flags == 2){ TheSeed[0].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; MyLovelyHero.tiktak += MyLovelyHero.moveS; }
 	if (flags == 3){ TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0;  MyLovelyHero.tiktak += MyLovelyHero.moveS; }
 	if (flags == 4){ TheSeed[0].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0;  MyLovelyHero.tiktak += MyLovelyHero.moveS; }
-	std::cout << MyLovelyHero.tiktak << std::endl;
 }
