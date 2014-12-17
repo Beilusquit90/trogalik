@@ -16,7 +16,7 @@ Body::Body()
 	}
 
 	
-	int temp = 1 + rand() % 6;		// задаем рандомную надбавку на статы.
+	int temp = 1 + rand() % 6;		// задаем рандомную надбавку на статы. =)
 	for (int count = 0; count < temp; count++)
 	{
 		int i = rand() % 4 + 1;

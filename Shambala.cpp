@@ -1,3 +1,4 @@
+// сделал читабельные комменты
 #include "stdafx.h"
 #include "Shambala.h"
 #include <gl\glut.h>
