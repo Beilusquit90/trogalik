@@ -26,7 +26,7 @@ void SKeyboard(int keyx, int x, int y);
 
 int _tmain(int argc, char **argv)
 {
-	
+	std::cout << "Trollguelike started" << std::endl;
 	srand(time(NULL));   
 	//RuinesMap x(1);
 	Shambala x;

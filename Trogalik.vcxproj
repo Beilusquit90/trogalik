@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="Body.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="roomList.h" />
     <ClInclude Include="RuinesMap.h" />
     <ClInclude Include="Shambala.h" />
     <ClInclude Include="stdafx.h" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Body.cpp" />
+    <ClCompile Include="roomList.cpp" />
     <ClCompile Include="RuinesMap.cpp" />
     <ClCompile Include="Shambala.cpp" />
     <ClCompile Include="stdafx.cpp">
