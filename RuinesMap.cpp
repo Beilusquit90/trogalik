@@ -276,6 +276,69 @@ int RuinesMap::Draw( )
 	return 0;
 }
 
+void RuinesMap::WhatIsee()
+{
+	int xpos=800/5;
+	int ypos=800/5;
+	int z = 800 / 30;
+	int range = 10;
+	int rRange = (range * 2) + 1;
+	int startx;
+	int starty;
+	int ii = 0;
+	int jj = 0;
+
+	if ((MyHero->cx - range) <= 0) startx = 0;
+	else
+	if ((MyHero->cx + range) >= sizeMap)  startx = sizeMap - rRange;
+	else
+		startx = MyHero->cx - range;
+
+
+	if ((MyHero->cy - range) <= 0) starty = 0;
+	else
+	if ((MyHero->cy + range) >= sizeMap)  starty = sizeMap - rRange;
+	else
+		starty = MyHero->cy - range;
+
+
+	
+
+	if ((MyHero->cy + range) >= sizeMap - 1)  starty = sizeMap - rRange-1;
+	glBegin(GL_LINES);
+
+	for (int i = starty, ii=0; i < (starty + rRange); i++,ii++)
+	{
+		for (int j = startx, jj=0; j < (startx + rRange); j++,jj++)
+		{
+			if (levelSize[j][i] != 0)
+			{
+				switch (levelSize[j][i])
+				{
+				case 1:glColor3f(0.9, 0.3, 0.1); break;
+				case 2:glColor3f(0.2, 0.2, 0.5); break;
+				case 3:glColor3f(0.7, 0.3, 0.8); break;
+				case 4:glColor3f(0.2, 0.1, 0.7); break;
+				case 9:glColor3f(0.7, 0.6, 0.7); break;
+				case 999:glColor3f(1, 1, 0);	 break;
+				default:glColor3f(1, 0.0, 0.0); break;
+				}
+				for (int count = 0; count < z; count++)
+				{
+					for (int count2 = 0; count2 < z; count2++){
+						glVertex2f((ii*z)+xpos, (jj*z)+ypos);
+						glVertex2f((ii*z) + xpos + count, (jj*z) + ypos + count2);
+					}
+				}
+			}
+		}
+	}
+
+
+	glEnd();
+}
+
+
 
 void RuinesMap::MapGen()
 {

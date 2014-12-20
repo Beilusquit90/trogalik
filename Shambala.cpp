@@ -45,7 +45,8 @@ void Shambala::Draw()
 {
 	for (auto &x : TheSeed)
 	{
-		x.Draw();
+		x.WhatIsee();
+		//x.Draw();
 		//DrawHero();
 	}
 }
