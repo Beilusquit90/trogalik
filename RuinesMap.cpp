@@ -5,6 +5,9 @@
 #include <iostream>
 #include <gl\glut.h>
 #include <queue>  
+#include "TileTextures.h"
+
+extern TileTextures tails;
 
 extern const int sizeMap;
 
@@ -97,7 +100,6 @@ void RuinesMap::Attack(int _x, int _y, Body*rhs)
 
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
-	//std::cout << levelSize[x][y] << std::endl;
 	if (x >= 0 && x<sizeMap)
 	if (y >= 0 && y<sizeMap)
 	{	
@@ -244,9 +246,7 @@ int RuinesMap::fly(MAmap&bird)
 
 	if (MA[dx][dy] != 0)
 	{
-		int dflag=0;
-		int count=0;
-		bird.life = 0;
+		
 		for (auto &x : vMA)
 		{
 			if (x.cx == dx&&x.cy == dy){ x.life = 0; bird.life = 0; break; }
@@ -261,7 +261,7 @@ int RuinesMap::fly(MAmap&bird)
 		bird.cx = dx;
 		bird.cy = dy;
 		MA[dx][dy] = bird.effect;
-		bird.tiktak += 0.1;
+		bird.tiktak += 0.2;
 		return 0;
 	}
 
@@ -370,35 +370,35 @@ int RuinesMap::Draw()
 {
 	//for (auto ma : vMA)	ma.Draw();	//отрисовка стрелл и магии на карте.
 
-	glBegin(GL_LINES);
-	glColor3f(0.6, 0.4, 0.6);
+	//glColor3f(0.6, 0.4, 0.6);
 	int x = 0, y = 0;
 	int z = 800 / sizeMap;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 	{
-		if (levelSize[j][i] != 0)
+		if (levelSize[j][i]!= 0 )
 		{
+			
 			switch (levelSize[j][i])
 			{
-			case 1:glColor3f(0.9, 0.3, 0.1); break;
-			case 2:glColor3f(0.2, 0.2, 0.5); break;
-			case 3:glColor3f(0.7, 0.3, 0.8); break;
-			case 4:glColor3f(0.2, 0.1, 0.7); break;
-			case 9:glColor3f(0.7, 0.6, 0.7); break;
-			case 999:glColor3f(1, 1, 0);	 break;
-			default:glColor3f(1, 0.0, 0.0); break;
+			case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+			case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
+			case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
+			case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]);
+			case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
+			case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]);	 break;	// стена.
+			default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]);	 break;
 			}
-			for (int count = 0; count < z; count++)
-			{
-				for (int count2 = 0; count2 < z; count2++){
-					glVertex2f(i*z, j*z);
-					glVertex2f(i*z + count, j*z + count2);}
-			}
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0); glVertex2f(i*z, j*z);
+			glTexCoord2f(0.0, 1.0); glVertex2f(i*z, j*z + z);
+			glTexCoord2f(1.0, 1.0); glVertex2f(i*z + z, j*z + z);
+			glTexCoord2f(1.0, 0.0); glVertex2f(i*z + z, j*z);
+			glEnd();
 		}
 	}
 
-	glEnd();
+	
 	return 0;
 }
 */
@@ -432,45 +432,36 @@ void RuinesMap::WhatIsee()
 	else
 		starty = MyHero->cy - range;
 
-
-
-
-
-
-	glBegin(GL_LINES);
+	
 	for (int i = starty, ii=0; i < (starty + rRange); i++,ii++)
 	{
 		for (int j = startx, jj=0; j < (startx + rRange); j++,jj++)
 		{
 			if (levelSize[j][i] != 0)
 			{
-				switch (levelSize[j][i])
+							switch (levelSize[j][i])
 				{
-				case 1:glColor3f(0.9, 0.3, 0.1); break;
-				case 2:glColor3f(0.2, 0.2, 0.5); break;
-				case 3:glColor3f(0.7, 0.3, 0.8); break;
-				case 4:glColor3f(0.2, 0.1, 0.7); break;
-				case 9:glColor3f(0.7, 0.6, 0.7); break;
-				case 999:glColor3f(1, 1, 0);	 break;
-				default:glColor3f(1, 0.0, 0.0); break;
+				case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;	//рожа
+				case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;	//рожа
+				case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;  //рожа
+				case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;  //рожа
+				case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;		//герой
+				case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
+				default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;    //рожа
 				}
-				for (int count = 0; count < z; count++)
-				{
-					for (int count2 = 0; count2 < z; count2++){
-						glVertex2f((ii*z)+xpos, (jj*z)+ypos);
-						glVertex2f((ii*z) + xpos + count, (jj*z) + ypos + count2);
-					}
-				}
+				glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z)+xpos, (jj*z)+ypos);
+				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z)+xpos, (jj*z)+ypos + z);
+				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z)+ypos + z);
+				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z)+ypos);
+				glEnd();
 			}
 		}
 	}
 
 
-	glEnd();
 
-
-
-	glBegin(GL_LINES);
+	
 	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
 	{
 		for (int j = startx, jj = 0; j < (startx + rRange); j++, jj++)
@@ -479,27 +470,23 @@ void RuinesMap::WhatIsee()
 			{
 				switch (MA[j][i])
 				{
-				case 1:glColor3f(0.9, 0.3, 0.1); break;
-				case 2:glColor3f(0.2, 0.2, 0.5); break;
-				case 3:glColor3f(0.7, 0.3, 0.8); break;
-				case 4:glColor3f(0.2, 0.1, 0.7); break;
-				case 9:glColor3f(0.7, 0.6, 0.7); break;
-				case 999:glColor3f(1, 1, 0);	 break;
-				default:glColor3f(1, 0.0, 0.0); break;
+				case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[3]); break;
+				//case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+				//case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+				//case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+				//case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
+				//case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
+				//default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;
 				}
-				for (int count = 0; count < z; count++)
-				{
-					for (int count2 = 0; count2 < z; count2++){
-						glVertex2f((ii*z) + xpos, (jj*z) + ypos);
-						glVertex2f((ii*z) + xpos + count, (jj*z) + ypos + count2);
-					}
-				}
+				glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos);
+				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos + z);
+				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos + z);
+				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos);
+				glEnd();
 			}
 		}
 	}
-
-
-	glEnd();
 }
 
 

@@ -11,8 +11,9 @@
 #include "Shambala.h"
 #include <string.h>
 #include <gl\glaux.h>
+#include "TileTextures.h"
 
-unsigned int textures[1];
+
 
 
 extern int flags;
@@ -21,10 +22,12 @@ int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
 int ts = 70;
 int flagK;
+extern TileTextures tails;
 
 //const int xSize = 15;
 //const int ySize = 15;
-void LoadTextures();
+
+
 void Draw();
 void initialize();
 void Timer(int x);
@@ -44,6 +47,8 @@ int _tmain(int argc, char **argv)
 	glutInitWindowSize(wWidth, wHeight);           //Размер
 	glutInitWindowPosition(100, 200);        // позиция окна.
 	glutCreateWindow("Trollguelike.");      // создал окно с именем
+	
+
 	initialize();
 	//glutFullScreen();
 	glViewport(0, wHeight, 0, wWidth);       //Отвечает за то, какая область окна перерисовывается, то есть размер такой же как у окна
@@ -57,15 +62,15 @@ int _tmain(int argc, char **argv)
 	return 0;
 }
 
-void LoadTextures()
-{
-	AUX_RGBImaageRec *texture1 = auxDIBImageLoad;
 
-
-}
 
 void initialize() //говорящее название
 {
+
+	tails.LoadTextures();
+	
+	glEnable(GL_TEXTURE_2D);
+	
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -76,9 +81,7 @@ void initialize() //говорящее название
 void Draw() //говорящее название
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0, 1.0, 1.0);
-	glBegin(GL_LINES);
-	//  Setka();
+	
 	xxx->Draw();
 	glLoadIdentity();
 	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера

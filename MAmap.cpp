@@ -2,10 +2,7 @@
 #include "MAmap.h"
 
 
-MAmap::MAmap()
-{
 
-}
 
 MAmap::MAmap(Body*rhs, int dir, Meffects eff, int r) :direction(dir), Attacker(rhs), effect(eff), range(r)
 {
