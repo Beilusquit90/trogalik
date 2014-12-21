@@ -79,17 +79,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bag.h" />
     <ClInclude Include="Body.h" />
+    <ClInclude Include="MAmap.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="roomList.h" />
     <ClInclude Include="RuinesMap.h" />
     <ClInclude Include="Shambala.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bag.cpp" />
     <ClCompile Include="Body.cpp" />
-    <ClCompile Include="roomList.cpp" />
+    <ClCompile Include="MAmap.cpp" />
     <ClCompile Include="RuinesMap.cpp" />
     <ClCompile Include="Shambala.cpp" />
     <ClCompile Include="stdafx.cpp">

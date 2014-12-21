@@ -1,5 +1,6 @@
 ﻿#pragma once
-class RuinesMap;
+
+#include "bag.h"
 
 class Body
 {
@@ -11,9 +12,11 @@ public:
 	~Body();
 	void operator=(const Body&rhs);
 	void sKoef();
+	int exp;
 
 	int role;
 	int hp;
+	int maxhp;
 	int ag;
 	int str;
 	int intel;
@@ -26,8 +29,12 @@ public:
 	double moveS;		// скорость ходьбы.
 	double rundiagonalS; // скорость ходьбы на искосок.
 	double meditationS;  // скорость медитации восстановления маны и хп.
-	double shotS;		// выстрела скорость.
+	double shotS;		// скорость выстрела.
 	double jumpSpeed;	// скорость прыжка назад или вперед.
+	bag inventory;
+	int mana;
+	int maxmana;
+	Body *MyKiller;		//ну ты понял че.
 };
 
 

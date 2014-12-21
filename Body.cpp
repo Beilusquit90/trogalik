@@ -2,11 +2,12 @@
 #include "Body.h"
 #include <iostream>
 #include <stdlib.h>
-#include "RuinesMap.h"
+
 int flags = 0;
 
 Body::Body()
 {
+	inventory.addr();
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
 	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
 	{
@@ -20,7 +21,7 @@ Body::Body()
 	for (int count = 0; count < temp; count++)
 	{
 		int i = rand() % 4 + 1;
-		if (i == 1)hp++;
+		if (i == 1)maxhp++;
 		if (i == 2)ag++;
 		if (i == 3)str++;
 		if (i == 4)intel++;
@@ -35,9 +36,10 @@ Body::Body(Body *rhs){
 }
 
 
-
 Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем статы, в зависимости от уровня подземелья.
 {
+	inventory.addr();
+	exp = lvl * 10;
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
 	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
 	{
@@ -51,7 +53,7 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем �
 	for (int count = 0; count < temp; count++)
 	{
 		int i=rand() % 4 + 1;
-		if (i == 1)hp++;
+		if (i == 1)maxhp++;
 		if (i == 2)ag++;
 		if (i == 3)str++;
 		if (i == 4)intel++;
@@ -73,6 +75,11 @@ Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем �
 
 Body::Body(const Body&rhs)
 {
+	inventory = rhs.inventory;
+	mana = rhs.mana;
+	maxmana = rhs.maxmana;
+	maxhp = rhs.maxhp;
+	exp = rhs.exp;
 	hp = rhs.hp;
 	ag = rhs.str;
 	str = rhs.str;
@@ -98,6 +105,11 @@ Body::~Body()
 
 void Body::operator=(const Body&rhs)
 {
+	inventory = rhs.inventory;
+	mana = rhs.mana;
+	maxmana = rhs.maxmana;
+	maxhp = rhs.maxhp;
+	exp = rhs.exp;
 	hp = rhs.hp;
 	ag = rhs.str;
 	str = rhs.str;

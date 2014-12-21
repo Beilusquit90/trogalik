@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "RuinesMap.h"
 #include "Shambala.h"
+#include <string.h>
+
 
 extern int flags;
 Shambala * xxx;
@@ -16,19 +18,21 @@ int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
 int ts = 70;
 int flagK;
+
 //const int xSize = 15;
 //const int ySize = 15;
 
 void Draw();
 void initialize();
 void Timer(int x);
+void Keyboard(unsigned char keyx, int x, int y);
 void SKeyboard(int keyx, int x, int y);
+
 
 int _tmain(int argc, char **argv)
 {
 	std::cout << "Trollguelike started" << std::endl;
 	srand(time(NULL));   
-	//RuinesMap x(1);
 	Shambala x;
 	xxx=&x;
 	
@@ -38,12 +42,12 @@ int _tmain(int argc, char **argv)
 	glutInitWindowPosition(100, 200);        // позиция окна.
 	glutCreateWindow("Trollguelike.");      // создал окно с именем
 	initialize();
-
+	//glutFullScreen();
 	glViewport(0, wHeight, 0, wWidth);       //Отвечает за то, какая область окна перерисовывается, то есть размер такой же как у окна
 	glutDisplayFunc(Draw);    //  если ты свернул приложение и развернул, вот чтобы появилась картинка, программа вызывает функцию draw, где идет отрисовка
 	glutTimerFunc(ts, Timer, 0);      // поясняем няшке глуту, что эту функцию юзаем для анимации
 
-//	glutKeyboardFunc(Keyboard);
+	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(SKeyboard);
 
 	glutMainLoop();
@@ -72,6 +76,7 @@ void Draw() //говорящее название
 	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера
 }
 
+
 void Timer(int x)
 {
 	xxx->Activ();
@@ -81,11 +86,33 @@ void Timer(int x)
 
 void SKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
 {// всякие ф11 и прочие юзабельные клавиши
-	switch (keyx)
+	if (flags == 0)
 	{
-	case GLUT_KEY_LEFT: if (flags == 0){ flags= 3; }	break;	//влево
-	case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
-	case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
-	case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
+		switch (keyx)
+		{
+		case GLUT_KEY_LEFT: if (flags == 0){ flags = 3; }	break;	//влево
+		case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
+		case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
+		case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
+		}
+	}
+}
+
+void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это координаты мышки.
+{// все клавиши типа буквы цифры
+	if (flags == 0)
+	{
+		switch (keyx)
+		{
+		case 'a':	if (flags == 0){ flags = 5; }	break;	//влево
+		//case 'd':	//if (key != 3){ key = 4; }	break;	//вправо
+		//case 's':	//if (key != 1){ key = 2; }	break;	//вниз
+		//case 'w':	//if (key != 2){ key = 1; }	break;	//вверх
+		//case '=':	//if (ts>10){ ts--; cout << ts << endl; }	break;	//++
+		//case '-':	//ts++; cout << ts << endl;	break;	//--
+		//case '9':	//ap++;;	break;	//++
+		//case '0':	//ap--;;	break;	//--
+		}
+		//flagk = 1;
 	}
 }

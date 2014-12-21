@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include "Body.h"
-#include "roomList.h"
+#include "MAmap.h"
 
 const int sizeMap = 50;
 
@@ -15,24 +15,24 @@ public:
 	~RuinesMap();					//+
 	void Add(int lvl);
 	int Activ();
-	int Draw();
+	//int Draw();
 	void WhatIsee();
 	void NewMapMan();
 	void rMove(Body&x);
+	void flyDeath();					// функция отвечающая за смерть стрелл и заклинаний.
+	int fly(MAmap&rhs);
+	void DrawFly();
+
 	int Move(int x, int y,Body*rhs);
 	void test();
 	void CreateLvl();
 	void SetMyHero(Body&MyLovelyHero);
 	void Attack(int x,int y,Body*rhs);
+	int Shot(Body*rhs,int dir);
 	void WhoDie();
 	void MapGen();
 	void checkdiag();
-
-
 	void PatchFound();
-
-	
-	
 		class Point
 	{
 	public:
@@ -50,9 +50,10 @@ public:
 	void generatePassage(const Point &start, const Point &finish);
 private:
 	int levelSize[sizeMap][sizeMap];			//массив содержащий отметки существ.
-	int MAE[sizeMap][sizeMap];				//карта магии и стрел, запущенные врагами
-	int MA[sizeMap][sizeMap];					//карта нашей магии и стрел.
-	int patchOfTheMoon[sizeMap][sizeMap];		// не самый удачный эксперимент, посмотрим что выйдет.
+	int MMA[sizeMap][sizeMap];				//Массовая магия, особая так сказать...
+	int MA[sizeMap][sizeMap];					//карта магии и стрел.
+
+	std::vector<MAmap>vMA;
 	std::vector<Body>vBody;			
 	int lvl;
 	Body *MyHero;

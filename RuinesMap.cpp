@@ -13,7 +13,10 @@ RuinesMap::RuinesMap()
 	lvl = 1;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
+	{
 		levelSize[i][j] = 0;
+		MA[i][j] = 0;
+	}
 	CreateLvl();
 	int temp = (rand() % 6) + 5;
 	std::cout << "TEMPO" << temp << std::endl;
@@ -32,6 +35,7 @@ RuinesMap::RuinesMap(const RuinesMap&rhs)
 	for (int j = 0; j < sizeMap; j++)
 	{
 		levelSize[i][j] = rhs.levelSize[i][j];
+		MA[i][j] = rhs.MA[i][j];
 	}
 	lvl = rhs.lvl;
 	//test();
@@ -40,8 +44,10 @@ RuinesMap::RuinesMap(const RuinesMap&rhs)
 void RuinesMap::operator=(RuinesMap&rhs)
 {
 	for (int i = 0; i < sizeMap; i++)
-	for (int j = 0; j < sizeMap; j++)
+	for (int j = 0; j < sizeMap; j++){
 		levelSize[j][i] = rhs.levelSize[j][i];
+		MA[i][j] = rhs.MA[i][j];
+	}
 	lvl = rhs.lvl;
 	//test();
 }
@@ -51,7 +57,9 @@ RuinesMap::RuinesMap(int _lvl)
 	lvl = _lvl;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
-		levelSize[i][j] = 0;
+	{
+		levelSize[i][j] = 0; MA[i][j] = 0;
+	}
 	CreateLvl();
 	int temp = (rand() % 6) + 15;
 	for (int i = 0; i < temp; i++)
@@ -80,6 +88,7 @@ void RuinesMap::Attack(int _x, int _y, Body*rhs)
 		if (x.cx == _x&&x.cy == _y)
 		{
 			vBody[count].hp -= rhs->str;
+			vBody[count].MyKiller = rhs;
 			std::cout << "ATTACK" << std::endl;
 		}
 		count++;
@@ -169,6 +178,8 @@ void RuinesMap::rMove(Body&x) // заставляет убогих, соверш
 
 void RuinesMap::WhoDie()
 {
+	flyDeath();
+
 	int dFlag = 0;
 	int count = 0;
 	for (auto &x:vBody)
@@ -181,8 +192,11 @@ void RuinesMap::WhoDie()
 		}
 		count++;
 	}
-	if (dFlag==1)
-	{		vBody.erase(vBody.begin() + count);
+	if (dFlag == 1)
+	{
+		(vBody.begin() + count)->MyKiller->exp += (vBody.begin() + count)->exp;		//отдаем опыт моему убийце.
+		std::cout << (vBody.begin() + count)->MyKiller->exp << std::endl;
+			vBody.erase(vBody.begin() + count);
 		std::cout << "ONE DIE NOW!!!" << std::endl;
 		dFlag = 0;
 	}
@@ -190,15 +204,112 @@ void RuinesMap::WhoDie()
 
 int RuinesMap::Activ( )
 {
-		for (auto &act : vBody)
-	{	
+	for (auto &act : vMA)
+	{
+		if (act.tiktak <= 0)
+			
+			fly(act);
+		else
+			act.tiktak -= 0.2;
+	}
+
+
+	for (auto &act : vBody)
+	{
 		if (act.tiktak <= 0)
 			rMove(act);
 		else
 			act.tiktak -= 0.2;
 	}
+
+
+
+	
 return 0;
 }
+
+int RuinesMap::fly(MAmap&bird)
+{
+	int dx, dy;
+	if (bird.direction == 0){ dx = bird.cx;	dy = bird.cy + 1; }
+	if (bird.direction == 1){ dx = bird.cx + 1;	dy = bird.cy + 1;}
+	if (bird.direction == 2){ dx = bird.cx + 1;	dy = bird.cy;}
+	if (bird.direction == 3){ dx = bird.cx + 1;	dy = bird.cy - 1;}
+	if (bird.direction == 4){ dx = bird.cx;	dy = bird.cy - 1;}
+	if (bird.direction == 5){ dx = bird.cx - 1;	dy = bird.cy - 1;}
+	if (bird.direction == 6){ dx = bird.cx - 1;	dy = bird.cy;}
+	if (bird.direction == 7){ dx = bird.cx - 1;	dy = bird.cy + 1;}
+
+	if (levelSize[dx][dy] == 999){
+		bird.life = 0; return 0; }
+
+	if (MA[dx][dy] != 0)
+	{
+		int dflag=0;
+		int count=0;
+		bird.life = 0;
+		for (auto &x : vMA)
+		{
+			if (x.cx == dx&&x.cy == dy){ x.life = 0; bird.life = 0; break; }
+			
+		}
+		return 0;
+	}
+	
+	if (levelSize[dx][dy] == 0)
+	{
+		MA[bird.cx][bird.cy] = 0;
+		bird.cx = dx;
+		bird.cy = dy;
+		MA[dx][dy] = bird.effect;
+		bird.tiktak += 0.2;
+		return 0;
+	}
+
+	if (levelSize[dx][dy] == 9)		// если, на пути стою я сам.
+	{
+		bird.life = 0;
+		MyHero->hp -= bird.dmg;
+		MyHero->MyKiller = bird.Attacker;
+		return 0;
+	}
+
+	if (levelSize[dx][dy] != 0)
+	{
+		for (auto &x : vBody)
+		if (x.cx == dx&&x.cy == dy){ x.hp -= bird.dmg; bird.life = 0; x.MyKiller = bird.Attacker; break; }
+		return 0;
+	
+	}
+	
+	return 0;
+}
+
+void RuinesMap::flyDeath()
+{
+	int dFlag = 0;
+	int count = 0;
+	for (auto &x : vMA)
+	{
+		if (x.life == 0)
+		{
+			dFlag = 1;
+			break;
+		}
+		count++;
+	}
+	if (dFlag == 1)
+	{
+		MA[(vMA.begin() + count)->cx][(vMA.begin() + count)->cy] = 0;
+		vMA.erase(vMA.begin() + count);
+		dFlag = 0;
+	}
+}
+	
+
+
+
+
 
 
 void RuinesMap::SetMyHero(Body&MyLovelyHero)
@@ -223,6 +334,20 @@ void RuinesMap::SetMyHero(Body&MyLovelyHero)
 	}
 }
 
+int RuinesMap::Shot(Body*rhs,int dir)
+{
+	if (rhs->inventory.arrow > 0)
+	{
+		int r;
+		if (rhs->ag > 25)r = 7;
+		else r = 5;
+		vMA.push_back(MAmap(rhs, dir, Arrow, r));
+		MA[rhs->cx][rhs->cy] = 1;
+		return 3;
+	}
+	return 0;
+}
+
 void RuinesMap::NewMapMan()
 {
 	int i = 1, cx, cy, role;
@@ -241,9 +366,11 @@ void RuinesMap::NewMapMan()
 	std::cout << "Gj man. New kid has ben planted in our map" << std::endl;
 }
 
-
-int RuinesMap::Draw( )
+/*
+int RuinesMap::Draw()
 {
+	//for (auto ma : vMA)	ma.Draw();	//отрисовка стрелл и магии на карте.
+
 	glBegin(GL_LINES);
 	glColor3f(0.6, 0.4, 0.6);
 	int x = 0, y = 0;
@@ -275,13 +402,18 @@ int RuinesMap::Draw( )
 	glEnd();
 	return 0;
 }
+*/
+void RuinesMap::DrawFly()
+{}
 
 void RuinesMap::WhatIsee()
 {
+	
+
 	int xpos=800/5;
 	int ypos=800/5;
 	int z = 800 / 30;
-	int range = 10;
+	int range = 8;
 	int rRange = (range * 2) + 1;
 	int startx;
 	int starty;
@@ -302,11 +434,11 @@ void RuinesMap::WhatIsee()
 		starty = MyHero->cy - range;
 
 
-	
 
-	if ((MyHero->cy + range) >= sizeMap - 1)  starty = sizeMap - rRange-1;
+
+
+
 	glBegin(GL_LINES);
-
 	for (int i = starty, ii=0; i < (starty + rRange); i++,ii++)
 	{
 		for (int j = startx, jj=0; j < (startx + rRange); j++,jj++)
@@ -327,6 +459,39 @@ void RuinesMap::WhatIsee()
 				{
 					for (int count2 = 0; count2 < z; count2++){
 						glVertex2f((ii*z)+xpos, (jj*z)+ypos);
+						glVertex2f((ii*z) + xpos + count, (jj*z) + ypos + count2);
+					}
+				}
+			}
+		}
+	}
+
+
+	glEnd();
+
+
+
+	glBegin(GL_LINES);
+	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
+	{
+		for (int j = startx, jj = 0; j < (startx + rRange); j++, jj++)
+		{
+			if (MA[j][i] != 0)
+			{
+				switch (MA[j][i])
+				{
+				case 1:glColor3f(0.9, 0.3, 0.1); break;
+				case 2:glColor3f(0.2, 0.2, 0.5); break;
+				case 3:glColor3f(0.7, 0.3, 0.8); break;
+				case 4:glColor3f(0.2, 0.1, 0.7); break;
+				case 9:glColor3f(0.7, 0.6, 0.7); break;
+				case 999:glColor3f(1, 1, 0);	 break;
+				default:glColor3f(1, 0.0, 0.0); break;
+				}
+				for (int count = 0; count < z; count++)
+				{
+					for (int count2 = 0; count2 < z; count2++){
+						glVertex2f((ii*z) + xpos, (jj*z) + ypos);
 						glVertex2f((ii*z) + xpos + count, (jj*z) + ypos + count2);
 					}
 				}
@@ -375,7 +540,7 @@ void RuinesMap::MapGen()
 			{
 				for (int i = tempxmm; i < tempxpp;i++)
 				for (int j = tempymm; j < tempypp;j++)
-				if (levelSize[i][j] != 999){ flagm = 1; }
+				if (levelSize[i][j] != 999){ flagm = 1; break; }
 			}
 
 			if (flagm == 0)
@@ -385,6 +550,7 @@ void RuinesMap::MapGen()
 				{
 					levelSize[i][j] = 0;
 				}
+				
 				RL.push_back(Point(x, y));
 				temp--;
 			}

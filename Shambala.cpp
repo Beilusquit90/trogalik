@@ -7,7 +7,7 @@ extern int flags;
 Shambala::Shambala()
 {
 	TheSeed.push_back(RuinesMap(1));
-	flag = 1;
+	flag = 0;
 	SetMyHero();
 }
 
@@ -24,18 +24,18 @@ void Shambala::SetMyHero()
 
 int Shambala::Activ()
 {
-	TheSeed[0].WhoDie();
+	TheSeed[flag].WhoDie();
 	if (MyLovelyHero.hp <= 0)
 		return 0;
+	if (MyLovelyHero.tiktak <= 0)
+	{
+		HeroSteps();
+		return 0;
+	}
+	else
+		MyLovelyHero.tiktak -= 0.2;
 	for (auto &x : TheSeed)
 	{
-		if (MyLovelyHero.tiktak <= 0)
-		{
-			HeroSteps();
-			return 0;
-		}
-		else
-			MyLovelyHero.tiktak -= 0.2;
 		x.Activ();
 	}
 	return 0;
@@ -47,28 +47,10 @@ void Shambala::Draw()
 	{
 		x.WhatIsee();
 		//x.Draw();
-		//DrawHero();
 	}
+
 }
-/*
-void Shambala::DrawHero()  //раскоменчу это, когда герой будет отрисовываться текстуркой.
-{
-	MyLovelyHero.cx;
-	MyLovelyHero.cy;
-	int z = 800 / 50;
-	glBegin(GL_LINES);
-	glColor3f(1, 0.1, 0.1);
-	for (int count = 0; count < z; count++)
-	{
-		for (int count2 = 0; count2 < z; count2++)
-		{
-			glVertex2f(MyLovelyHero.cx*z, MyLovelyHero.cy*z);
-			glVertex2f(MyLovelyHero.cx*z + count, MyLovelyHero.cy*z + count2);
-		}
-	}
-	std::cout << "DRAW HERO" << std::endl;
-	glEnd();
-}*/ 
+
 
 void Shambala::HeroSteps()
 {
@@ -77,5 +59,7 @@ void Shambala::HeroSteps()
 	if (flags == 2){ temp = TheSeed[0].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
 	if (flags == 3){ temp = TheSeed[0].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0; }
 	if (flags == 4){ temp = TheSeed[0].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
+	if (flags == 5){ temp = TheSeed[0].Shot(&MyLovelyHero,2); flags = 0; }
 	if (temp == 1){ MyLovelyHero.tiktak += MyLovelyHero.moveS; }
+	if (temp == 3){ MyLovelyHero.tiktak += MyLovelyHero.shotS; }
 }
