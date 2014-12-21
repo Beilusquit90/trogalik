@@ -10,6 +10,9 @@
 #include "RuinesMap.h"
 #include "Shambala.h"
 #include <string.h>
+#include <gl\glaux.h>
+
+unsigned int textures[1];
 
 
 extern int flags;
@@ -21,7 +24,7 @@ int flagK;
 
 //const int xSize = 15;
 //const int ySize = 15;
-
+void LoadTextures();
 void Draw();
 void initialize();
 void Timer(int x);
@@ -54,7 +57,12 @@ int _tmain(int argc, char **argv)
 	return 0;
 }
 
+void LoadTextures()
+{
+	AUX_RGBImaageRec *texture1 = auxDIBImageLoad;
 
+
+}
 
 void initialize() //говорящее название
 {

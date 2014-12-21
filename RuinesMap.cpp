@@ -197,7 +197,6 @@ void RuinesMap::WhoDie()
 		(vBody.begin() + count)->MyKiller->exp += (vBody.begin() + count)->exp;		//отдаем опыт моему убийце.
 		std::cout << (vBody.begin() + count)->MyKiller->exp << std::endl;
 			vBody.erase(vBody.begin() + count);
-		std::cout << "ONE DIE NOW!!!" << std::endl;
 		dFlag = 0;
 	}
 }
@@ -262,7 +261,7 @@ int RuinesMap::fly(MAmap&bird)
 		bird.cx = dx;
 		bird.cy = dy;
 		MA[dx][dy] = bird.effect;
-		bird.tiktak += 0.2;
+		bird.tiktak += 0.1;
 		return 0;
 	}
 
@@ -502,6 +501,8 @@ void RuinesMap::WhatIsee()
 
 	glEnd();
 }
+
+
 
 
 

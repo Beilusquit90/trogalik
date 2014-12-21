@@ -33,6 +33,7 @@ public:
 	void MapGen();
 	void checkdiag();
 	void PatchFound();
+	
 		class Point
 	{
 	public:
