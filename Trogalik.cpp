@@ -148,7 +148,7 @@ void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это �
 		case 27: if (flagMenu == 1){ flagMenu = 0; flags = 0; break; }
 				 else {flagMenu = 1; break;}
 
-		case  'r': if (flagMenu == 1){ xxx->Restart(); } break;
+		case  'r': if (flagMenu == 1){ xxx->Restart(); flagMenu = 0; } break;
 		case  'q': if (flagMenu == 1){ exit(0); } break;
 	
 

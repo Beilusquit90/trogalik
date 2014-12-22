@@ -96,7 +96,15 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 		{
 			x = rand() % sizeMap;
 			y = rand() % sizeMap;
-			if (levelSize[x][y] == 0)
+			if (levelSize[x][y] == 0 
+				&& levelSize[x][y + 1] == 0
+				&& levelSize[x + 1][y + 1] == 0 
+				&& levelSize[x + 1][y] == 0 
+				&& levelSize[x + 1][y - 1] == 0 
+				&& levelSize[x][y - 1] == 0 
+				&& levelSize[x - 1][y - 1] == 0 
+				&& levelSize[x - 1][y] == 0 
+				&& levelSize[x-1][y + 1] == 0)
 			{
 				z = 1;
 				levelSize[x][y] = 666;
@@ -112,7 +120,15 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 		{
 			x = rand() % sizeMap;
 			y = rand() % sizeMap;
-			if (levelSize[x][y] == 0)
+			if (levelSize[x][y] == 0
+				&& levelSize[x][y + 1] == 0
+				&& levelSize[x + 1][y + 1] == 0
+				&& levelSize[x + 1][y] == 0
+				&& levelSize[x + 1][y - 1] == 0
+				&& levelSize[x][y - 1] == 0
+				&& levelSize[x - 1][y - 1] == 0
+				&& levelSize[x - 1][y] == 0
+				&& levelSize[x - 1][y + 1] == 0)
 			{
 				z = 1;
 				levelSize[x][y] = 666;
@@ -123,7 +139,15 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 		{
 			x = rand() % sizeMap;
 			y = rand() % sizeMap;
-			if (levelSize[x][y] == 0)
+			if (levelSize[x][y] == 0
+				&& levelSize[x][y + 1] == 0
+				&& levelSize[x + 1][y + 1] == 0
+				&& levelSize[x + 1][y] == 0
+				&& levelSize[x + 1][y - 1] == 0
+				&& levelSize[x][y - 1] == 0
+				&& levelSize[x - 1][y - 1] == 0
+				&& levelSize[x - 1][y] == 0
+				&& levelSize[x - 1][y + 1] == 0)
 			{
 				z = 1;
 				levelSize[x][y] = 777;
@@ -165,9 +189,9 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 		if (levelSize[x][y] == 666 || levelSize[x][y] == 777)
 		if (rhs == MyHero)
 		{
-			if (levelSize[x][y] == 666)ioflag = 1;
-			if (levelSize[x][y] == 777)ioflag = 2;
-			std::cout << "Nice Try" << levelSize[x][y] << std::endl;
+			if (levelSize[x][y] == 666){ioflag = 1; levelSize[MyHero->cx][MyHero->cy] = 0;}
+			if (levelSize[x][y] == 777){ioflag = 2; levelSize[MyHero->cx][MyHero->cy] = 0;}
+			std::cout << "Go another level" << levelSize[x][y] << std::endl;
 			return 1;
 		}
 
@@ -273,7 +297,6 @@ void RuinesMap::WhoDie()
 
 int RuinesMap::Activ( )
 {
-
 	for (auto &act : vMA)
 	{
 		if (act.tiktak <= 0)
@@ -291,10 +314,6 @@ int RuinesMap::Activ( )
 		else
 			act.tiktak -= 0.2;
 	}
-
-
-
-	
 return 0;
 }
 
@@ -381,21 +400,78 @@ void RuinesMap::SetMyHero(Body&MyLovelyHero)
 	MyHero = &MyLovelyHero;
 	MyLovelyHero.role = 9;
 	//MyLovelyHero.hp = 1000;
-	int i = 1, cx, cy;
+	int cx, cy;
 		 
+	if (vDoor.size()<2)
 	for (;;)
 	{
 		cx = rand() % sizeMap;
 		cy = rand() % sizeMap;
 		if (levelSize[cx][cy] == 0)
 		{
-			//std::cout << "x" << cx << "   y" << cy << std::endl;
+			
 			levelSize[cx][cy] = MyLovelyHero.role;
 			MyLovelyHero.cx = cx;
 			MyLovelyHero.cy = cy;
+			std::cout << "SetMyHero" << std::endl;
 			break;
 		}
 	}
+}
+
+
+void RuinesMap::PushUp(Body&MyLovelyHero)
+{
+	MyHero = &MyLovelyHero;
+	
+	for (auto &x:vDoor)
+		if (x.io == 0)
+		{
+			std::cout << "PushUp" << std::endl;
+			if (levelSize[x.cx][x.cy + 1] == 0){ MyHero->cx = x.cx; MyHero->cy = x.cy + 1; break; }
+			else
+			if (levelSize[x.cx + 1][x.cy + 1] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy + 1; break; }
+			else
+			if (levelSize[x.cx + 1][x.cy] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy; break; }
+			else
+			if (levelSize[x.cx + 1][x.cy - 1] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy - 1; break; }
+			else
+			if (levelSize[x.cx][x.cy - 1] == 0){ MyHero->cx = x.cx; MyHero->cy = x.cy - 1; break; }
+			else
+			if (levelSize[x.cx - 1][x.cy - 1] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy - 1; break; }
+			else
+			if (levelSize[x.cx - 1][x.cy] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy; break; }
+			else
+			if (levelSize[x.cx - 1][x.cy + 1] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy + 1; break; }
+		}
+		levelSize[MyLovelyHero.cx][MyLovelyHero.cy] = 9;
+}
+
+void RuinesMap::PushDown(Body&MyLovelyHero)
+{
+	MyHero = &MyLovelyHero;
+
+	for (auto &x : vDoor)
+	if (x.io == 1)
+	{
+		std::cout << "PushDown" << std::endl;
+		if (levelSize[x.cx][x.cy + 1] == 0){ MyHero->cx = x.cx; MyHero->cy = x.cy + 1; break; }
+		else
+		if (levelSize[x.cx + 1][x.cy + 1] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy + 1; break; }
+		else
+		if (levelSize[x.cx + 1][x.cy] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy; break; }
+		else
+		if (levelSize[x.cx + 1][x.cy - 1] == 0){ MyHero->cx = x.cx + 1; MyHero->cy = x.cy - 1; break; }
+		else
+		if (levelSize[x.cx][x.cy - 1] == 0){ MyHero->cx = x.cx; MyHero->cy = x.cy - 1; break; }
+		else
+		if (levelSize[x.cx - 1][x.cy - 1] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy - 1; break; }
+		else
+		if (levelSize[x.cx - 1][x.cy] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy; break; }
+		else
+		if (levelSize[x.cx - 1][x.cy + 1] == 0){ MyHero->cx = x.cx - 1; MyHero->cy = x.cy + 1; break; }
+	}
+	levelSize[MyLovelyHero.cx][MyLovelyHero.cy] = 9;
 }
 
 int RuinesMap::Shot(Body*rhs,int dir)
@@ -427,7 +503,6 @@ void RuinesMap::NewMapMan()
 			break;
 		}
 	}
-	std::cout << "Gj man. New kid has ben planted in our map" << std::endl;
 }
 
 /*
@@ -468,7 +543,58 @@ int RuinesMap::Draw()
 }
 */
 void RuinesMap::DrawFly()
-{}
+{
+	int xpos = 800 / 5;
+	int ypos = 800 / 5;
+	int z = 800 / 30;
+	int range = 8;
+	int rRange = (range * 2) + 1;
+	int startx;
+	int starty;
+	int ii = 0;
+	int jj = 0;
+
+	if ((MyHero->cx - range) <= 0) startx = 0;
+	else
+	if ((MyHero->cx + range) >= sizeMap)  startx = sizeMap - rRange;
+	else
+		startx = MyHero->cx - range;
+
+
+	if ((MyHero->cy - range) <= 0) starty = 0;
+	else
+	if ((MyHero->cy + range) >= sizeMap)  starty = sizeMap - rRange;
+	else
+		starty = MyHero->cy - range;
+
+
+	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
+	{
+		for (int j = startx, jj = 0; j < (startx + rRange); j++, jj++)
+		{
+			if (MA[j][i] != 0)
+			{
+				switch (MA[j][i])
+				{
+				case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[3]); break;	//отрисовка стрелы.
+					//case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+					//case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+					//case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
+					//case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
+					//case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
+					//default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;
+				}
+				glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos);
+				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos + z);
+				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos + z);
+				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos);
+				glEnd();
+			}
+		}
+	}
+
+}
 
 void RuinesMap::WhatIsee()
 {
@@ -518,34 +644,6 @@ void RuinesMap::WhatIsee()
 				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z)+xpos, (jj*z)+ypos + z);
 				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z)+ypos + z);
 				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z)+ypos);
-				glEnd();
-			}
-		}
-	}
-
-
-	
-	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
-	{
-		for (int j = startx, jj = 0; j < (startx + rRange); j++, jj++)
-		{
-			if (MA[j][i] != 0)
-			{
-				switch (MA[j][i])
-				{
-				case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[3]); break;
-				//case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
-				//case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
-				//case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
-				//case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
-				//case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
-				//default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;
-				}
-				glBegin(GL_QUADS);
-				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos);
-				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos + z);
-				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos + z);
-				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos);
 				glEnd();
 			}
 		}

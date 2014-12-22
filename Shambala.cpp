@@ -35,18 +35,37 @@ void Shambala::Restart()
 
 int Shambala::Activ()
 {
-	if (TheSeed[flag].ioflag == 1)
+	if (TheSeed[flag].ioflag != 0)
 	{
-		std::cout << "Warning 1" << std::endl;
-		TheSeed[flag].ioflag = 0;
-		std::cout << "Warning 2" << std::endl;
-		flag++;
-		std::cout << "Warning 3" << std::endl;
-		TheSeed.push_back(RuinesMap(flag + 1));
-		std::cout << "Warning 4" << std::endl;
-		TheSeed[flag].SetMyHero(MyLovelyHero);
-		std::cout << "Warning 5" << std::endl;
-		return 1;
+		if (TheSeed[flag].ioflag == 1)
+		{
+			std::cout << "DANGER1" << std::endl;
+			if (TheSeed.size() > flag + 1)
+			{
+				TheSeed[flag].ioflag = 0;
+				flag++;
+				TheSeed[flag].PushUp(MyLovelyHero);
+				return 1;
+			}
+			else
+			{
+				TheSeed[flag].ioflag = 0;
+				flag++;
+				TheSeed.push_back(RuinesMap(flag + 1));
+				std::cout << "DANGER 1 1" << std::endl;
+				TheSeed[flag].PushUp(MyLovelyHero);
+				std::cout << "DANGER 1 1 1" << std::endl;
+				return 1;
+			}
+		}
+		if (TheSeed[flag].ioflag == 2)
+		{
+			std::cout << "DANGER2" << std::endl;
+			TheSeed[flag].ioflag = 0;
+			flag--;
+			TheSeed[flag].PushDown(MyLovelyHero);
+			return 1;
+		}
 	}
 	TheSeed[flag].WhoDie();
 	if (MyLovelyHero.hp <= 0){
@@ -69,12 +88,8 @@ int Shambala::Activ()
 
 void Shambala::Draw()
 {
-	/*for (auto &x : TheSeed)
-	{
-		x.WhatIsee();
-		//x.Draw();
-	}*/
-	TheSeed[flag].WhatIsee();
+	TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
+	TheSeed[flag].DrawFly();		// выстрелленая магия
 }
 
 

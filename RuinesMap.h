@@ -34,7 +34,8 @@ public:
 	void DrawFly();						//отрисовка летящей магии и стрелл.
 	//отрисовка выше
 
-
+	void PushUp(Body&MyLovelyHero);
+	void PushDown(Body&MyLovelyHero);
 	void SetMyHero(Body&MyLovelyHero);
 	void Doors();						//расставляем двери.
 	void NewMapMan();					//генерация и расстановка нового моба.
