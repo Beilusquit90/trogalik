@@ -8,11 +8,12 @@
 #include "TileTextures.h"
 
 extern TileTextures tails;
-
 extern const int sizeMap;
+
 
 RuinesMap::RuinesMap()
 {
+	ioflag = 0;
 	lvl = 1;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
@@ -27,12 +28,17 @@ RuinesMap::RuinesMap()
 	{
 		NewMapMan();
 	}
+	Doors();
 	//test();
 }
 
 
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
+	ioflag = rhs.ioflag;
+	RL = rhs.RL;
+	vDoor = rhs.vDoor;
+	vMA = rhs.vMA;
 	vBody = rhs.vBody;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
@@ -52,11 +58,13 @@ void RuinesMap::operator=(RuinesMap&rhs)
 		MA[i][j] = rhs.MA[i][j];
 	}
 	lvl = rhs.lvl;
+	ioflag = rhs.ioflag;
 	//test();
 }
 
 RuinesMap::RuinesMap(int _lvl)
 {
+	ioflag = 0;
 	lvl = _lvl;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
@@ -69,6 +77,7 @@ RuinesMap::RuinesMap(int _lvl)
 	{
 		NewMapMan();
 	}
+	Doors();
 	//test();
 }
 
@@ -77,6 +86,53 @@ RuinesMap::~RuinesMap()
 {
 	//std::cout << "RuinesMAp DIE`S..." << std::endl;
 }
+
+void RuinesMap::Doors()	// рандомно пихает дверушку.
+{
+	int x, y;
+	if (lvl == 1)
+	{
+		for (int z = 0; z == 0;)
+		{
+			x = rand() % sizeMap;
+			y = rand() % sizeMap;
+			if (levelSize[x][y] == 0)
+			{
+				z = 1;
+				levelSize[x][y] = 666;
+				int t = 1;
+				vDoor.push_back(TheDoor(1, x, y));
+			}
+		}
+		
+	}
+	else
+	{
+		for (int z = 0; z == 0;)
+		{
+			x = rand() % sizeMap;
+			y = rand() % sizeMap;
+			if (levelSize[x][y] == 0)
+			{
+				z = 1;
+				levelSize[x][y] = 666;
+				vDoor.push_back(TheDoor(1, x, y));
+			}
+		}
+		for (int z = 0; z == 0;)
+		{
+			x = rand() % sizeMap;
+			y = rand() % sizeMap;
+			if (levelSize[x][y] == 0)
+			{
+				z = 1;
+				levelSize[x][y] = 777;
+				vDoor.push_back(TheDoor(0, x, y));
+			}
+		}
+	}
+}
+
 
 void RuinesMap::Attack(int _x, int _y, Body*rhs)
 {
@@ -98,11 +154,23 @@ void RuinesMap::Attack(int _x, int _y, Body*rhs)
 	}
 }
 
+
+
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
 	if (x >= 0 && x<sizeMap)
 	if (y >= 0 && y<sizeMap)
 	{	
+
+		if (levelSize[x][y] == 666 || levelSize[x][y] == 777)
+		if (rhs == MyHero)
+		{
+			if (levelSize[x][y] == 666)ioflag = 1;
+			if (levelSize[x][y] == 777)ioflag = 2;
+			std::cout << "Nice Try" << levelSize[x][y] << std::endl;
+			return 1;
+		}
+
 		if (levelSize[x][y] == 999) return 0;
 		if (levelSize[x][y] == 0)	//проверка на свободный путь.
 		{
@@ -205,6 +273,7 @@ void RuinesMap::WhoDie()
 
 int RuinesMap::Activ( )
 {
+
 	for (auto &act : vMA)
 	{
 		if (act.tiktak <= 0)
@@ -307,10 +376,6 @@ void RuinesMap::flyDeath()
 	
 
 
-
-
-
-
 void RuinesMap::SetMyHero(Body&MyLovelyHero)
 {
 	MyHero = &MyLovelyHero;
@@ -407,7 +472,6 @@ void RuinesMap::DrawFly()
 
 void RuinesMap::WhatIsee()
 {
-	
 
 	int xpos=800/5;
 	int ypos=800/5;
@@ -460,7 +524,6 @@ void RuinesMap::WhatIsee()
 	}
 
 
-
 	
 	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
 	{
@@ -488,9 +551,6 @@ void RuinesMap::WhatIsee()
 		}
 	}
 }
-
-
-
 
 
 void RuinesMap::MapGen()

@@ -82,17 +82,20 @@
   <ItemGroup>
     <ClInclude Include="bag.h" />
     <ClInclude Include="Body.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="MAmap.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RuinesMap.h" />
     <ClInclude Include="Shambala.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TheDoor.h" />
     <ClInclude Include="TileTextures.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bag.cpp" />
     <ClCompile Include="Body.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="MAmap.cpp" />
     <ClCompile Include="RuinesMap.cpp" />
     <ClCompile Include="Shambala.cpp" />
@@ -100,6 +103,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TheDoor.cpp" />
     <ClCompile Include="TileTextures.cpp" />
     <ClCompile Include="Trogalik.cpp" />
   </ItemGroup>

@@ -8,7 +8,7 @@ int flags = 0;
 Body::Body()
 {
 	inventory.addr();
-	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
+	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0; exp = 0;
 	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
 	{
 	case 1:str += 2;   break;
@@ -28,7 +28,6 @@ Body::Body()
 	}
 	sKoef();
 	//std::cout << "STANDART CONSTRUCTOR"<< std::endl;
-
 }
 
 Body::Body(Body *rhs){

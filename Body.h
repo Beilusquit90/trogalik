@@ -13,7 +13,6 @@ public:
 	void operator=(const Body&rhs);
 	void sKoef();
 	int exp;
-
 	int role;
 	int hp;
 	int maxhp;

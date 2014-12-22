@@ -12,17 +12,22 @@
 #include <string.h>
 #include <gl\glaux.h>
 #include "TileTextures.h"
+#include "GameMenu.h"
 
+//экстернат как бы.
+extern double mx;
+extern double my;
 
-
-
+extern TileTextures tails;
+extern int flagMenu;
 extern int flags;
+
 Shambala * xxx;
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
 int ts = 70;
 int flagK;
-extern TileTextures tails;
+GameMenu menu;
 
 //const int xSize = 15;
 //const int ySize = 15;
@@ -33,7 +38,7 @@ void initialize();
 void Timer(int x);
 void Keyboard(unsigned char keyx, int x, int y);
 void SKeyboard(int keyx, int x, int y);
-
+void mouseMove(int x, int y);
 
 int _tmain(int argc, char **argv)
 {
@@ -54,7 +59,7 @@ int _tmain(int argc, char **argv)
 	glViewport(0, wHeight, 0, wWidth);       //Отвечает за то, какая область окна перерисовывается, то есть размер такой же как у окна
 	glutDisplayFunc(Draw);    //  если ты свернул приложение и развернул, вот чтобы появилась картинка, программа вызывает функцию draw, где идет отрисовка
 	glutTimerFunc(ts, Timer, 0);      // поясняем няшке глуту, что эту функцию юзаем для анимации
-
+	glutMotionFunc(mouseMove);
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(SKeyboard);
 
@@ -62,6 +67,17 @@ int _tmain(int argc, char **argv)
 	return 0;
 }
 
+void mouseMove(int x, int y) {
+
+	
+
+		
+
+		// Обновление направления камеры
+	mx = x;
+	mx = y;
+	
+}
 
 
 void initialize() //говорящее название
@@ -81,22 +97,34 @@ void initialize() //говорящее название
 void Draw() //говорящее название
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	
-	xxx->Draw();
-	glLoadIdentity();
+	if (flagMenu == 0)
+	{
+		xxx->Draw();
+	}
+	else
+		menu.Draw();
+
+
+		glLoadIdentity();
 	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера
 }
 
 
 void Timer(int x)
 {
-	xxx->Activ();
+	if (flagMenu == 0)
+	{
+		xxx->Activ();
+	}
 	Draw();
 	glutTimerFunc(ts, Timer, 0);
 }
 
 void SKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
 {// всякие ф11 и прочие юзабельные клавиши
+	
 	if (flags == 0)
 	{
 		switch (keyx)
@@ -105,8 +133,10 @@ void SKeyboard(int keyx, int x, int y)// икс и игрик, это коорд
 		case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
 		case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
 		case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
-		}
 	}
+	}
+	if (flagMenu == 1)
+		flags = 0;
 }
 
 void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это координаты мышки.
@@ -115,6 +145,13 @@ void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это �
 	{
 		switch (keyx)
 		{
+		case 27: if (flagMenu == 1){ flagMenu = 0; flags = 0; break; }
+				 else {flagMenu = 1; break;}
+
+		case  'r': if (flagMenu == 1){ xxx->Restart(); } break;
+		case  'q': if (flagMenu == 1){ exit(0); } break;
+	
+
 		case 'a':	if (flags == 0){ flags = 5; }	break;	//влево
 		//case 'd':	//if (key != 3){ key = 4; }	break;	//вправо
 		//case 's':	//if (key != 1){ key = 2; }	break;	//вниз
@@ -126,4 +163,6 @@ void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это �
 		}
 		//flagk = 1;
 	}
+	if (flagMenu == 1)
+	flags = 0;
 }

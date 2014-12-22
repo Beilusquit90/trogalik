@@ -11,6 +11,7 @@ public:
 	void SetMyHero();
 	void Draw();
 	int Activ();
+	void Restart();
 	void DrawHero();
 	void HeroSteps();
 private:

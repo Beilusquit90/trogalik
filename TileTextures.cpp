@@ -3,6 +3,9 @@
 #include <gl\glaux.h>
 #include <iostream>
 TileTextures tails;
+double mx;
+double my;
+
 
 TileTextures::TileTextures()
 {
@@ -20,6 +23,7 @@ void TileTextures::LoadTextures()
 	AUX_RGBImageRec *texture3 = auxDIBImageLoadA("3.bmp");
 	AUX_RGBImageRec *texture4 = auxDIBImageLoadA("4.bmp");
 	AUX_RGBImageRec *texture5 = auxDIBImageLoadA("5.bmp");
+	AUX_RGBImageRec *texture6 = auxDIBImageLoadA("Menu.bmp");
 
 
 	glGenTextures(5, &textures[0]);		// первый элемент, сколько загружаем текстур. второй ссылка, на первый элемент массива
@@ -48,5 +52,10 @@ void TileTextures::LoadTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, texture5->sizeX, texture5->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, texture5->data);
+
+	glBindTexture(GL_TEXTURE_2D, textures[5]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, texture6->sizeX, texture6->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, texture6->data);
 }
 
