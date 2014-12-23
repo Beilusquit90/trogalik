@@ -505,7 +505,7 @@ void RuinesMap::NewMapMan()
 	}
 }
 
-/*
+
 int RuinesMap::Draw()
 {
 	//for (auto ma : vMA)	ma.Draw();	//отрисовка стрелл и магии на карте.
@@ -541,7 +541,7 @@ int RuinesMap::Draw()
 	
 	return 0;
 }
-*/
+
 void RuinesMap::DrawFly()
 {
 	int xpos = 800 / 5;
@@ -637,6 +637,8 @@ void RuinesMap::WhatIsee()
 				case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;  //рожа
 				case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;		//герой
 				case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
+				case 666:glBindTexture(GL_TEXTURE_2D, tails.textures[6]); break;	//вниз
+				case 777:glBindTexture(GL_TEXTURE_2D, tails.textures[5]); break;	//вверх
 				default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;    //рожа
 				}
 				glBegin(GL_QUADS);
@@ -655,13 +657,13 @@ void RuinesMap::MapGen()
 {
 	std::cout << "MAP GEN" << std::endl;
 	int x, y;
-		int temp = rand() % 20+20;	// рандомно выбираем количество комнат.
+		int temp = rand() % 20+27;	// рандомно выбираем количество комнат.
 		
 		for (int count = 0; count < 10000&&temp!=0; count++)
 		{
 			int flagm = 0;
-			int rSizex = rand() % 15 + 7; // размер по оси икс и игрик, делаем от 2 до 8.
-			int rSizey = rand() % 15 + 7;
+			int rSizex = rand() % 12 + 7; // размер по оси икс и игрик, делаем от 2 до 8.
+			int rSizey = rand() % 12 + 7;
 
 			x = rand() % (sizeMap-1);			//выбираем рандомную точку на карте, для создания комнаты.
 			y = rand() % (sizeMap-1);
@@ -696,8 +698,27 @@ void RuinesMap::MapGen()
 				{
 					levelSize[i][j] = 0;
 				}
-				
-				RL.push_back(Point(x, y));
+
+
+				int flagxy = 0;
+				for (int i = tempxmm-1; i < tempxpp+1; i++)
+				for (int j = tempymm-1; j < tempypp+1; j++)
+				{
+					if (i == (tempxmm - 1) || i == (tempxpp + 1))
+					if (levelSize[i][j] != 999)
+						flagxy++;
+
+					if (j == (tempymm - 1) || j == (tempypp + 1))
+					if (levelSize[i][j] != 999)
+						flagxy++;
+
+				}
+
+				if (flagxy==0)
+				{
+					RL.push_back(Point(x, y));
+					std::cout << "Push_back RL" << std::endl;
+				}
 				temp--;
 			}
 	}

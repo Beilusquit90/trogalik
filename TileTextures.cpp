@@ -23,10 +23,12 @@ void TileTextures::LoadTextures()
 	AUX_RGBImageRec *texture3 = auxDIBImageLoadA("3.bmp");
 	AUX_RGBImageRec *texture4 = auxDIBImageLoadA("4.bmp");
 	AUX_RGBImageRec *texture5 = auxDIBImageLoadA("5.bmp");
-	AUX_RGBImageRec *texture6 = auxDIBImageLoadA("Menu.bmp");
+	AUX_RGBImageRec *texture6 = auxDIBImageLoadA("6.bmp");
+	AUX_RGBImageRec *texture7 = auxDIBImageLoadA("7.bmp");
+	AUX_RGBImageRec *menu = auxDIBImageLoadA("Menu.bmp");
 
 
-	glGenTextures(5, &textures[0]);		// первый элемент, сколько загружаем текстур. второй ссылка, на первый элемент массива
+	glGenTextures(8, &textures[0]);		// первый элемент, сколько загружаем текстур. второй ссылка, на первый элемент массива
 
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -57,5 +59,15 @@ void TileTextures::LoadTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, texture6->sizeX, texture6->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, texture6->data);
+
+	glBindTexture(GL_TEXTURE_2D, textures[6]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, texture7->sizeX, texture7->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, texture7->data);
+
+	glBindTexture(GL_TEXTURE_2D, textures[7]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, menu->sizeX, menu->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, menu->data);
 }
 

@@ -5,6 +5,6 @@ public:
 	TileTextures();
 	~TileTextures();
 	void LoadTextures();
-	unsigned int textures[6];
+	unsigned int textures[8];
 };
 
