@@ -21,10 +21,10 @@ extern double my;
 extern TileTextures tails;
 extern int flagMenu;
 extern int flags;
-
+extern int wWidth;
+extern int wHeight;
 Shambala * xxx;
-int wWidth = 800;    //высота
-int wHeight = 800;    //ширина
+
 int ts = 70;
 int flagK;
 GameMenu menu;
@@ -38,7 +38,9 @@ void initialize();
 void Timer(int x);
 void Keyboard(unsigned char keyx, int x, int y);
 void SKeyboard(int keyx, int x, int y);
-void mouseMove(int x, int y);
+void MouseMove(int x, int y);		
+void MouseMotin(int x, int y);
+void MousePress(int button, int state, int x, int y);
 
 int _tmain(int argc, char **argv)
 {
@@ -56,27 +58,40 @@ int _tmain(int argc, char **argv)
 
 	initialize();
 	//glutFullScreen();
+	//glutSetCursor(GLUT_CURSOR_NONE);
 	glViewport(0, wHeight, 0, wWidth);       //Отвечает за то, какая область окна перерисовывается, то есть размер такой же как у окна
 	glutDisplayFunc(Draw);    //  если ты свернул приложение и развернул, вот чтобы появилась картинка, программа вызывает функцию draw, где идет отрисовка
 	glutTimerFunc(ts, Timer, 0);      // поясняем няшке глуту, что эту функцию юзаем для анимации
-	glutMotionFunc(mouseMove);
+	glutMotionFunc(MouseMotin);			//движение с зажатой мышкой.
+	glutMouseFunc(MousePress);
+	glutPassiveMotionFunc(MouseMove);
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(SKeyboard);
 
 	glutMainLoop();
+
 	return 0;
 }
 
-void mouseMove(int x, int y) {
+void MouseMotin(int x, int y)
+{
 
-	
 
-		
+}
 
-		// Обновление направления камеры
-	mx = x;
-	mx = y;
-	
+void MousePress(int button, int state, int x, int y)
+{
+	if (flagMenu == 0)
+		xxx->MousePress(button, state, x, y);
+	else
+		std::cout << "Menu" << std::endl;
+}
+
+void MouseMove(int x, int y) 
+{
+	mx = x, my = wHeight-y;
+
+
 }
 
 
@@ -97,7 +112,6 @@ void initialize() //говорящее название
 void Draw() //говорящее название
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
 	
 	if (flagMenu == 0)
 	{
@@ -106,7 +120,7 @@ void Draw() //говорящее название
 	else
 		menu.Draw();
 
-
+	tails.DrawMouse();
 		glLoadIdentity();
 	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера
 }

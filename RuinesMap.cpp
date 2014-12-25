@@ -7,9 +7,15 @@
 #include <queue>  
 #include "TileTextures.h"
 
+
+
+
 extern TileTextures tails;
 extern const int sizeMap;
-
+extern double mx;		//мышка икс
+extern double my;		//мышка игрик
+int wWidth = 800;    //высота
+int wHeight = 800;    //ширина
 
 RuinesMap::RuinesMap()
 {
@@ -31,7 +37,6 @@ RuinesMap::RuinesMap()
 	Doors();
 	//test();
 }
-
 
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
@@ -81,11 +86,158 @@ RuinesMap::RuinesMap(int _lvl)
 	//test();
 }
 
-
 RuinesMap::~RuinesMap()
 {
 	//std::cout << "RuinesMAp DIE`S..." << std::endl;
 }
+
+void RuinesMap::MousePress(int button, int  state, int x, int y)
+{
+	int z = wHeight / 30;
+	int xpos = wWidth / 5;
+	int ypos = wHeight / 5;
+	int xxpos = xpos + (z * 17) - 4;
+	int yypos = ypos + (z * 17) - 4;
+	int tx = mx / z;
+	int ty = my / z;
+	switch (button)
+	{
+	case GLUT_LEFT_BUTTON:
+		
+		if (state)if (mx > xpos&&my > ypos&&mx < xxpos&&my < yypos) if (steps.size()<=0) CreateSteps(tx, ty);
+
+
+	case GLUT_MIDDLE_BUTTON:if (state) break;
+	case GLUT_RIGHT_BUTTON:if (state) break;
+	default:
+		break;
+	}
+}
+
+int RuinesMap::CreateSteps(int tx,int ty)
+{
+	
+	int txx = startx + ty - 6;
+	int tyy = starty + tx - 6;
+	std::cout << "MyHero->cx" << MyHero->cx << "  MyHero->cy" << MyHero->cy << std::endl;
+	std::cout << "TXX" << txx << "  TYY" << tyy << std::endl;
+
+	
+	if (levelSize[txx][tyy] == 999){std::cout << "CRITINO IDIOTTO" << std::endl; return 0;}
+
+	Point start(MyHero->cx, MyHero->cy);
+	Point end(txx, tyy);
+	StepsFind(start, end);
+	
+	for (int i = sizeMap - 1; i >= 0; i--)
+	{
+		for (int j = sizeMap - 1; j >= 0; j--)
+		{
+			std::cout << Patch[i][j];
+		}
+		std::cout << std::endl;
+	}
+	
+	int xx = MyHero->cx;
+	int yy = MyHero->cy;
+	Patch[xx][yy] = 0;
+	for (;;)
+	{
+		if (Patch[xx][yy + 1] == 1){ steps.push_back(1); Patch[xx][yy] = 0; yy++; std::cout << "RIGHT " << std::endl; continue; };
+		//if (Patch[xx + 1][yy + 1] == 1){ steps.push_back(2); Patch[xx][yy] = 0; xx++; yy++; }
+		if (Patch[xx + 1][yy] == 1){ steps.push_back(3); Patch[xx][yy] = 0; xx++; std::cout << "TOP " << std::endl; continue; }
+		//if (Patch[xx + 1][yy - 1] == 1){ steps.push_back(4); Patch[xx][yy] = 0; xx++; yy--; }
+		if (Patch[xx][yy - 1] == 1){ steps.push_back(5); Patch[xx][yy] = 0; yy--; std::cout << "LEFT " << std::endl; continue; }
+		//if (Patch[xx - 1][yy - 1] == 1){ steps.push_back(6); Patch[xx][yy] = 0; xx--; yy--; }
+		if (Patch[xx - 1][yy] == 1){ steps.push_back(7); Patch[xx][yy] = 0; xx--; std::cout << "BOT " << std::endl; continue; }
+		//if (Patch[xx - 1][yy + 1] == 1){ steps.push_back(8); Patch[xx][yy] = 0; xx--; yy++; }
+	else	break;
+	}
+	
+	return 0;
+}
+
+void RuinesMap::StepsFind(const Point &start, const Point &finish)
+{
+
+	std::cout << "START STEP FINDS" << std::endl;
+	for (int i = 0; i < sizeMap; i++)
+	for (int j = 0; j < sizeMap; j++)
+		Patch[i][j] = -1;
+
+	std::cout << "-1 Entered." << std::endl;
+
+	for (int i = sizeMap - 1; i >= 0; i--)
+	for (int j = sizeMap - 1; j >= 0; j--)
+	if (levelSize[i][j] == 999) Patch[i][j] = -2;
+	std::cout << "-2 (Walls)Entered." << std::endl;
+	Patch[finish.x][finish.y] = 0;
+	std::cout << "0 Entered." << std::endl;
+
+	for (int z = 0; Patch[start.x][start.y] == (-1); z++)
+	{
+		std::cout <<"Z"<< z<< std::endl;
+		for (int i = 0; i < sizeMap; i++)
+		for (int j = 0; j < sizeMap; j++)
+		if (Patch[i][j] == z)
+		{
+			if (Patch[i][j + 1] == -1)	Patch[i][j + 1] = (z + 1);
+			if (Patch[i + 1][j] == -1)	Patch[i + 1][j] = (z + 1);
+			if (Patch[i][j - 1] == -1)	Patch[i][j - 1] = (z + 1);
+			if (Patch[i - 1][j] == -1)	Patch[i - 1][j] = (z + 1);
+		}
+	}
+
+	int temp[sizeMap][sizeMap];
+	for (int i = sizeMap - 1; i >= 0; i--)
+	for (int j = sizeMap - 1; j >= 0; j--)
+		temp[i][j] = 0;
+
+	for (int i = sizeMap - 1; i >= 0; i--)
+	for (int j = sizeMap - 1; j >= 0; j--)
+	if (levelSize[i][j] == 999) temp[i][j] = 9;
+
+
+	int tx = start.x;
+	int ty = start.y;
+	std::cout << "DANGER" << std::endl;
+	std::cout << Patch[start.x][start.y] << std::endl;
+	for (; Patch[tx][ty]!= 0;)
+	{
+		if (Patch[tx][ty + 1] == (Patch[tx][ty] - 1)){
+			ty++; temp[tx][ty] = 1; continue;
+		}
+		if (Patch[tx + 1][ty] == (Patch[tx][ty] - 1)){
+			tx++; temp[tx][ty] = 1; continue;
+		}
+		if (Patch[tx][ty - 1] == (Patch[tx][ty] - 1)){
+			ty--; temp[tx][ty] = 1; continue;
+		}
+		if (Patch[tx - 1][ty] == (Patch[tx][ty] - 1)){
+			tx--; temp[tx][ty] = 1; continue;
+		}
+	}
+
+	for (int i = sizeMap - 1; i >= 0; i--)
+	{
+		for (int j = sizeMap - 1; j >= 0; j--)
+		{
+			std::cout << temp[i][j];
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < sizeMap; i++)
+	for (int j = 0; j < sizeMap; j++)
+		Patch[i][j] = 0;
+
+	for (int i = 0; i < sizeMap; i++)
+	for (int j = 0; j < sizeMap; j++)
+		Patch[i][j] = temp[i][j];
+
+	std::cout << "Finish" << Patch[start.x][start.y] << std::endl;
+}
+
 
 void RuinesMap::Doors()	// рандомно пихает дверушку.
 {
@@ -157,6 +309,43 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 	}
 }
 
+int RuinesMap::Step() // возвращает 1 если действие сделано, и 0 если в очереди нету действий.
+{
+	std::cout << "STEPS ACTIVATE" << std::endl;
+	
+	if (steps.size() > 0)
+	{
+		int cx, cy;
+		auto &x = steps.begin();
+		std::cout << *x << std::endl;
+		switch (*x)
+		{
+		case 1:cx = MyHero->cx; cy = MyHero->cy + 1; break;
+		case 2:cx = MyHero->cx + 1;cy= MyHero->cy + 1; break;
+		case 3:cx = MyHero->cx + 1; cy = MyHero->cy; break;
+		case 4:cx = MyHero->cx + 1; cy = MyHero->cy - 1; break;
+		case 5:cx = MyHero->cx; cy = MyHero->cy - 1; break;
+		case 6:cx = MyHero->cx - 1; cy = MyHero->cy - 1;  break;
+		case 7:cx = MyHero->cx - 1; cy = MyHero->cy; break;
+		case 8:cx = MyHero->cx - 1; cy = MyHero->cy + 1;break;
+		default:std::cout << "STEP DANGER SITUATION" << std::endl; break;
+		}
+		if (levelSize[cx][cy] != 0)
+		{
+			steps.clear();
+			std::cout << "STEPS STOPPPING !=0"<<std::endl;
+			for (int i = 0; i < sizeMap; i++)
+			for (int j = 0; j < sizeMap; j++)
+				Patch[i][j] = 0;
+			return 0;
+		}
+		else
+			Move(cx, cy, MyHero);
+		steps.erase(steps.begin());
+	}
+	
+	return 0;
+}
 
 void RuinesMap::Attack(int _x, int _y, Body*rhs)
 {
@@ -173,15 +362,19 @@ void RuinesMap::Attack(int _x, int _y, Body*rhs)
 			vBody[count].hp -= rhs->str;
 			vBody[count].MyKiller = rhs;
 			std::cout << "ATTACK" << std::endl;
+			rhs->tiktak += rhs->attackS;
 		}
 		count++;
 	}
 }
 
-
-
 int RuinesMap::Move(int x,int y,Body*rhs)
 {
+	int diag = 0;
+	if (std::abs(rhs->cx - x) == 1 && std::abs(rhs->cy - y) == 1)
+		diag = 1;
+
+
 	if (x >= 0 && x<sizeMap)
 	if (y >= 0 && y<sizeMap)
 	{	
@@ -202,6 +395,10 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 			rhs->cx = x;
 			rhs->cy = y;
 			levelSize[rhs->cx][rhs->cy] = rhs->role;
+			if (diag == 1)
+				rhs->tiktak += rhs->rundiagonalS;
+			else
+				rhs->tiktak += rhs->moveS;
 			return 1;
 		}
 		else
@@ -245,26 +442,25 @@ void RuinesMap::CreateLvl()
 	std::cout << "MAP GEN FINISH" << std::endl;
 }
 
-
 void RuinesMap::rMove(Body&x) // заставляет убогих, совершать рандомное движение. На крайний случай, anotherMove
 {
 	for (int i = 0, j = 0; i < 1;)
 		{
 			if (j > 8)
 			{
-				x.tiktak+=4;
+				x.tiktak+=14;
 			}
 			int temp = rand() % 8;
 			switch (temp)
 			{
-			case 0: i = Move(x.cx, x.cy + 1, &x);			x.tiktak += x.moveS;	 break;  // вроде вверх
-			case 1: i = Move(x.cx + 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS;; break;
-			case 2: i = Move(x.cx + 1, x.cy, &x);			x.tiktak += x.moveS;	 break;
-			case 3: i = Move(x.cx + 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS;  break;
-			case 4: i = Move(x.cx, x.cy - 1, &x);			x.tiktak += x.moveS;	 break;
-			case 5: i = Move(x.cx - 1, x.cy - 1, &x);	x.tiktak += x.rundiagonalS;  break;
-			case 6: i = Move(x.cx - 1, x.cy, &x);				x.tiktak += x.moveS; break;
-			case 7: i = Move(x.cx - 1, x.cy + 1, &x);	x.tiktak += x.rundiagonalS;  break;
+			case 0: i = Move(x.cx, x.cy + 1, &x);		 break; //	x.tiktak += x.moveS;	 break;  // вроде вверх
+			case 1: i = Move(x.cx + 1, x.cy + 1, &x);	 break; //	x.tiktak += x.rundiagonalS;; break;
+			case 2: i = Move(x.cx + 1, x.cy, &x);		 break; //		x.tiktak += x.moveS;	 break;
+			case 3: i = Move(x.cx + 1, x.cy - 1, &x);	 break; //	x.tiktak += x.rundiagonalS;  break;
+			case 4: i = Move(x.cx, x.cy - 1, &x);		 break; //		x.tiktak += x.moveS;	 break;
+			case 5: i = Move(x.cx - 1, x.cy - 1, &x);	 break; //	x.tiktak += x.rundiagonalS;  break;
+			case 6: i = Move(x.cx - 1, x.cy, &x);		 break; //			x.tiktak += x.moveS; break;
+			case 7: i = Move(x.cx - 1, x.cy + 1, &x);  break; //		x.tiktak += x.rundiagonalS;  break;
 			default:						break;
 			}
 		}
@@ -392,8 +588,6 @@ void RuinesMap::flyDeath()
 		dFlag = 0;
 	}
 }
-	
-
 
 void RuinesMap::SetMyHero(Body&MyLovelyHero)
 {
@@ -419,8 +613,7 @@ void RuinesMap::SetMyHero(Body&MyLovelyHero)
 	}
 }
 
-
-void RuinesMap::PushUp(Body&MyLovelyHero)
+void RuinesMap::PushUp(Body&MyLovelyHero) //функция выбирающая расположение для нас, когда мы появляемся на этаж вверх.
 {
 	MyHero = &MyLovelyHero;
 	
@@ -447,7 +640,7 @@ void RuinesMap::PushUp(Body&MyLovelyHero)
 		levelSize[MyLovelyHero.cx][MyLovelyHero.cy] = 9;
 }
 
-void RuinesMap::PushDown(Body&MyLovelyHero)
+void RuinesMap::PushDown(Body&MyLovelyHero)//функция выбирающая расположение для нас, когда мы появляемся на этаж вниз.
 {
 	MyHero = &MyLovelyHero;
 
@@ -483,6 +676,7 @@ int RuinesMap::Shot(Body*rhs,int dir)
 		else r = 5;
 		vMA.push_back(MAmap(rhs, dir, Arrow, r));
 		MA[rhs->cx][rhs->cy] = 1;
+		rhs->tiktak += rhs->shotS;
 		return 3;
 	}
 	return 0;
@@ -505,14 +699,43 @@ void RuinesMap::NewMapMan()
 	}
 }
 
+void RuinesMap::DrawInterface()
+{
+	//
+
+	//std::cout << "MX  " << mx << "  MY  " << my << std::endl;
+	int z = wHeight / 30;
+	
+	int tx = mx / z;
+	int ty = my / z;
+
+	//std::cout << "tx  " << tx << "  ty  " << ty << std::endl;
+
+
+	
+	
+	int xpos = wWidth / 5;
+	int ypos = wHeight / 5;
+	int xxpos = xpos + (z * 17)-4;
+	int yypos = ypos + (z * 17)-4;
+		
+	if (mx>xpos&&my>ypos&&mx<xxpos&&my<yypos)
+		{
+				glBegin(GL_LINES);
+			glColor3f(1, 0, 0);
+			glVertex2f(tx*z, ty*z);
+			glVertex2f(tx*z, (ty*z) + z);
+			glVertex2f(tx*z, (ty*z) + z);
+			glVertex2f((tx*z)+z, (ty*z) + z);
+			glColor3f(1, 1, 1);
+			glEnd();
+		}
+	}
 
 int RuinesMap::Draw()
 {
-	//for (auto ma : vMA)	ma.Draw();	//отрисовка стрелл и магии на карте.
-
-	//glColor3f(0.6, 0.4, 0.6);
 	int x = 0, y = 0;
-	int z = 800 / sizeMap;
+	int z = wHeight / sizeMap;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 	{
@@ -524,7 +747,7 @@ int RuinesMap::Draw()
 			case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
 			case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
 			case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
-			case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]);
+			case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
 			case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
 			case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]);	 break;	// стена.
 			default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]);	 break;
@@ -534,6 +757,7 @@ int RuinesMap::Draw()
 			glTexCoord2f(0.0, 1.0); glVertex2f(i*z, j*z + z);
 			glTexCoord2f(1.0, 1.0); glVertex2f(i*z + z, j*z + z);
 			glTexCoord2f(1.0, 0.0); glVertex2f(i*z + z, j*z);
+			glColor3f(1, 1, 1);
 			glEnd();
 		}
 	}
@@ -544,8 +768,8 @@ int RuinesMap::Draw()
 
 void RuinesMap::DrawFly()
 {
-	int xpos = 800 / 5;
-	int ypos = 800 / 5;
+	int xpos = wWidth / 5;
+	int ypos = wHeight / 5;
 	int z = 800 / 30;
 	int range = 8;
 	int rRange = (range * 2) + 1;
@@ -599,13 +823,13 @@ void RuinesMap::DrawFly()
 void RuinesMap::WhatIsee()
 {
 
-	int xpos=800/5;
-	int ypos=800/5;
-	int z = 800 / 30;
+	int xpos = wWidth / 5;
+	int ypos = wHeight / 5;
+	int z = wHeight / 30;
 	int range = 8;
 	int rRange = (range * 2) + 1;
-	int startx;
-	int starty;
+	//int startx;
+	//int starty;
 	int ii = 0;
 	int jj = 0;
 
@@ -651,7 +875,6 @@ void RuinesMap::WhatIsee()
 		}
 	}
 }
-
 
 void RuinesMap::MapGen()
 {

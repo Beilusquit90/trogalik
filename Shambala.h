@@ -14,6 +14,7 @@ public:
 	void Restart();
 	void DrawHero();
 	void HeroSteps();
+	void MousePress(int button,int  state,int x,int y);
 private:
 	std::vector<RuinesMap>TheSeed;
 	int flag;

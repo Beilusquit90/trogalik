@@ -71,3 +71,13 @@ void TileTextures::LoadTextures()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, menu->sizeX, menu->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, menu->data);
 }
 
+void TileTextures::DrawMouse()
+{
+	/*glBindTexture(GL_TEXTURE_2D, tails.textures[3]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0); glVertex2f(mx - 15, my);
+	glTexCoord2f(0.0, 1.0); glVertex2f(mx - 15,my + 15);
+	glTexCoord2f(1.0, 1.0); glVertex2f(mx,my + 15);
+	glTexCoord2f(1.0, 0.0); glVertex2f(mx,my);
+	glEnd();*/
+}

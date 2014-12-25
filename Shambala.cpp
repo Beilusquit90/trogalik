@@ -11,11 +11,19 @@ Shambala::Shambala()
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
 	SetMyHero();
+	TheSeed[flag].steps.push_back(1);
+	TheSeed[flag].steps.push_back(2);
+	TheSeed[flag].steps.push_back(3);
 }
 
 
 Shambala::~Shambala()
 {
+}
+
+void Shambala::MousePress(int button, int  state, int x, int y)
+{
+	TheSeed[flag].MousePress(button, state, x, y);
 }
 
 void Shambala::SetMyHero()
@@ -29,7 +37,8 @@ void Shambala::Restart()
 	TheSeed.clear();
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
-	MyLovelyHero = Body();
+
+	MyLovelyHero =Body();
 	SetMyHero();
 }
 
@@ -39,7 +48,7 @@ int Shambala::Activ()
 	{
 		if (TheSeed[flag].ioflag == 1)
 		{
-			if (TheSeed.size() > flag + 1)
+			if (TheSeed.size() > (flag + 1))
 			{
 				TheSeed[flag].ioflag = 0;
 				flag++;
@@ -86,20 +95,29 @@ int Shambala::Activ()
 
 void Shambala::Draw()
 {
+	
 	//TheSeed[flag].Draw();
+	
 	TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
+
 	TheSeed[flag].DrawFly();		// выстрелленая магия
+	//TheSeed[flag].DrawInterface();
 }
 
 
 void Shambala::HeroSteps()
 {
-	int temp = 0;
-	if (flags == 1){ temp = TheSeed[flag].Move(MyLovelyHero.cx, MyLovelyHero.cy + 1, &MyLovelyHero); flags = 0; }
-	if (flags == 2){ temp = TheSeed[flag].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
-	if (flags == 3){ temp = TheSeed[flag].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0; }
-	if (flags == 4){ temp = TheSeed[flag].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
-	if (flags == 5){ temp = TheSeed[flag].Shot(&MyLovelyHero, 2); flags = 0; }
-	if (temp == 1){ MyLovelyHero.tiktak += MyLovelyHero.moveS; }
-	if (temp == 3){ MyLovelyHero.tiktak += MyLovelyHero.shotS; }
+	if (TheSeed[flag].steps.size()==0)
+	{
+		int temp = 0;
+		if (flags == 1){ temp = TheSeed[flag].Move(MyLovelyHero.cx, MyLovelyHero.cy + 1, &MyLovelyHero); flags = 0; }
+		if (flags == 2){ temp = TheSeed[flag].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
+		if (flags == 3){ temp = TheSeed[flag].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0; }
+		if (flags == 4){ temp = TheSeed[flag].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
+		if (flags == 5){ temp = TheSeed[flag].Shot(&MyLovelyHero, 2); flags = 0; }
+	}
+	else
+	{
+		TheSeed[flag].Step();			std::cout << "STEPS ACTIVATE IN HERO STEPS" << std::endl; flags = 0;
+	}
 }
