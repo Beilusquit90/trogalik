@@ -104,7 +104,7 @@ void RuinesMap::MousePress(int button, int  state, int x, int y)
 	{
 	case GLUT_LEFT_BUTTON:
 		
-		if (state)if (mx > xpos&&my > ypos&&mx < xxpos&&my < yypos) if (steps.size()<=0) CreateSteps(tx, ty);
+		if (state)if (mx > xpos&&my > ypos&&mx < xxpos&&my < yypos) if (steps.size()>0)steps.clear();else CreateSteps(tx, ty);
 
 
 	case GLUT_MIDDLE_BUTTON:if (state) break;
@@ -129,27 +129,18 @@ int RuinesMap::CreateSteps(int tx,int ty)
 	Point end(txx, tyy);
 	StepsFind(start, end);
 	
-	for (int i = sizeMap - 1; i >= 0; i--)
-	{
-		for (int j = sizeMap - 1; j >= 0; j--)
-		{
-			std::cout << Patch[i][j];
-		}
-		std::cout << std::endl;
-	}
-	
 	int xx = MyHero->cx;
 	int yy = MyHero->cy;
 	Patch[xx][yy] = 0;
 	for (;;)
 	{
-		if (Patch[xx][yy + 1] == 1){ steps.push_back(1); Patch[xx][yy] = 0; yy++; std::cout << "RIGHT " << std::endl; continue; };
+		if (Patch[xx][yy + 1] == 1){ steps.push_back(1); Patch[xx][yy] = 0; yy++;  continue; };
 		//if (Patch[xx + 1][yy + 1] == 1){ steps.push_back(2); Patch[xx][yy] = 0; xx++; yy++; }
-		if (Patch[xx + 1][yy] == 1){ steps.push_back(3); Patch[xx][yy] = 0; xx++; std::cout << "TOP " << std::endl; continue; }
+		if (Patch[xx + 1][yy] == 1){ steps.push_back(3); Patch[xx][yy] = 0; xx++; continue; }
 		//if (Patch[xx + 1][yy - 1] == 1){ steps.push_back(4); Patch[xx][yy] = 0; xx++; yy--; }
-		if (Patch[xx][yy - 1] == 1){ steps.push_back(5); Patch[xx][yy] = 0; yy--; std::cout << "LEFT " << std::endl; continue; }
+		if (Patch[xx][yy - 1] == 1){ steps.push_back(5); Patch[xx][yy] = 0; yy--; continue; }
 		//if (Patch[xx - 1][yy - 1] == 1){ steps.push_back(6); Patch[xx][yy] = 0; xx--; yy--; }
-		if (Patch[xx - 1][yy] == 1){ steps.push_back(7); Patch[xx][yy] = 0; xx--; std::cout << "BOT " << std::endl; continue; }
+		if (Patch[xx - 1][yy] == 1){ steps.push_back(7); Patch[xx][yy] = 0; xx--; continue; }
 		//if (Patch[xx - 1][yy + 1] == 1){ steps.push_back(8); Patch[xx][yy] = 0; xx--; yy++; }
 	else	break;
 	}
@@ -164,7 +155,6 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 		Patch[i][j] = -1;
-
 	std::cout << "-1 Entered." << std::endl;
 
 	for (int i = sizeMap - 1; i >= 0; i--)
@@ -176,7 +166,6 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 
 	for (int z = 0; Patch[start.x][start.y] == (-1); z++)
 	{
-		std::cout <<"Z"<< z<< std::endl;
 		for (int i = 0; i < sizeMap; i++)
 		for (int j = 0; j < sizeMap; j++)
 		if (Patch[i][j] == z)
@@ -200,7 +189,7 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 
 	int tx = start.x;
 	int ty = start.y;
-	std::cout << "DANGER" << std::endl;
+	
 	std::cout << Patch[start.x][start.y] << std::endl;
 	for (; Patch[tx][ty]!= 0;)
 	{
@@ -218,14 +207,6 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 		}
 	}
 
-	for (int i = sizeMap - 1; i >= 0; i--)
-	{
-		for (int j = sizeMap - 1; j >= 0; j--)
-		{
-			std::cout << temp[i][j];
-		}
-		std::cout << std::endl;
-	}
 
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
@@ -234,10 +215,7 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 		Patch[i][j] = temp[i][j];
-
-	std::cout << "Finish" << Patch[start.x][start.y] << std::endl;
 }
-
 
 void RuinesMap::Doors()	// рандомно пихает дверушку.
 {
@@ -264,7 +242,6 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 				vDoor.push_back(TheDoor(1, x, y));
 			}
 		}
-		
 	}
 	else
 	{
@@ -311,8 +288,6 @@ void RuinesMap::Doors()	// рандомно пихает дверушку.
 
 int RuinesMap::Step() // возвращает 1 если действие сделано, и 0 если в очереди нету действий.
 {
-	std::cout << "STEPS ACTIVATE" << std::endl;
-	
 	if (steps.size() > 0)
 	{
 		int cx, cy;
@@ -373,7 +348,6 @@ int RuinesMap::Move(int x,int y,Body*rhs)
 	int diag = 0;
 	if (std::abs(rhs->cx - x) == 1 && std::abs(rhs->cy - y) == 1)
 		diag = 1;
-
 
 	if (x >= 0 && x<sizeMap)
 	if (y >= 0 && y<sizeMap)

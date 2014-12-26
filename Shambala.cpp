@@ -1,13 +1,14 @@
-﻿
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Shambala.h"
 #include <gl\glut.h>
 #include "GameMenu.h"
+#include <time.h>
 extern int flags;
 extern int flagMenu;
 
 Shambala::Shambala()
 {
+	srand(time(NULL));
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
 	SetMyHero();
@@ -28,9 +29,39 @@ void Shambala::MousePress(int button, int  state, int x, int y)
 
 void Shambala::SetMyHero()
 {
+	MyLovelyHero.hp += 100;
 	TheSeed[0].SetMyHero(MyLovelyHero);
 }
 
+void Shambala::sKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
+{
+		
+		switch (keyx)
+		{
+		case GLUT_KEY_LEFT: if (flags == 0){ flags = 3; }	break;	//влево
+		case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
+		case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
+		case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
+		}
+		
+}
+
+void Shambala::Keyboard(unsigned char keyx, int x, int y)
+{
+		switch (keyx)
+		{
+		case 27: flagMenu = 1; break;
+		case  'a': flags = 5;  break;	//влево
+		
+			//case 'd':	//if (key != 3){ key = 4; }	break;	//вправо
+			//case 's':	//if (key != 1){ key = 2; }	break;	//вниз
+			//case 'w':	//if (key != 2){ key = 1; }	break;	//вверх
+			//case '=':	//if (ts>10){ ts--; cout << ts << endl; }	break;	//++
+			//case '-':	//ts++; cout << ts << endl;	break;	//--
+			//case '9':	//ap++;;	break;	//++
+			//case '0':	//ap--;;	break;	//--
+		}
+}
 
 void Shambala::Restart()
 {
@@ -107,6 +138,10 @@ void Shambala::Draw()
 
 void Shambala::HeroSteps()
 {
+	static int fhp;
+	if (fhp != MyLovelyHero.hp)(TheSeed[flag].steps.clear());
+	fhp = MyLovelyHero.hp;
+
 	if (TheSeed[flag].steps.size()==0)
 	{
 		int temp = 0;
@@ -118,6 +153,6 @@ void Shambala::HeroSteps()
 	}
 	else
 	{
-		TheSeed[flag].Step();			std::cout << "STEPS ACTIVATE IN HERO STEPS" << std::endl; flags = 0;
+		TheSeed[flag].Step(); flags = 0;
 	}
 }

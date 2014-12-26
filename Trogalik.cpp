@@ -23,14 +23,13 @@ extern int flagMenu;
 extern int flags;
 extern int wWidth;
 extern int wHeight;
-Shambala * xxx;
+extern Shambala x;
 
+
+Shambala * xxx=&x;
 int ts = 70;
 int flagK;
 GameMenu menu;
-
-//const int xSize = 15;
-//const int ySize = 15;
 
 
 void Draw();
@@ -46,8 +45,7 @@ int _tmain(int argc, char **argv)
 {
 	std::cout << "Trollguelike started" << std::endl;
 	srand(time(NULL));   
-	Shambala x;
-	xxx=&x;
+	
 	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // два буфера, 24-битный цвет ргб
@@ -75,8 +73,7 @@ int _tmain(int argc, char **argv)
 
 void MouseMotin(int x, int y)
 {
-
-
+	std::cout << "MouseMotin" << std::endl;
 }
 
 void MousePress(int button, int state, int x, int y)
@@ -90,8 +87,6 @@ void MousePress(int button, int state, int x, int y)
 void MouseMove(int x, int y) 
 {
 	mx = x, my = wHeight-y;
-
-
 }
 
 
@@ -114,14 +109,12 @@ void Draw() //говорящее название
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	if (flagMenu == 0)
-	{
 		xxx->Draw();
-	}
 	else
-		menu.Draw();
-
+	menu.Draw();
+	
 	tails.DrawMouse();
-		glLoadIdentity();
+	glLoadIdentity();
 	glutSwapBuffers(); // та же херня что и флуш, но для двойного буфера
 }
 
@@ -138,45 +131,18 @@ void Timer(int x)
 
 void SKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
 {// всякие ф11 и прочие юзабельные клавиши
-	
-	if (flags == 0)
-	{
-		switch (keyx)
-		{
-		case GLUT_KEY_LEFT: if (flags == 0){ flags = 3; }	break;	//влево
-		case GLUT_KEY_RIGHT:if (flags == 0){ flags = 1; }	break;	//вправо
-		case GLUT_KEY_DOWN:	if (flags == 0){ flags = 4; }	break;	//вниз
-		case GLUT_KEY_UP:	if (flags == 0){ flags = 2; }	break;	//вверх
-	}
-	}
-	if (flagMenu == 1)
-		flags = 0;
+	if (flagMenu == 0)
+		xxx->sKeyboard(keyx, x, y);
+	else
+		menu.sKeyboard(keyx, x, y);
 }
 
 void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это координаты мышки.
 {// все клавиши типа буквы цифры
-	if (flags == 0)
-	{
-		switch (keyx)
-		{
-		case 27: if (flagMenu == 1){ flagMenu = 0; flags = 0; break; }
-				 else {flagMenu = 1; break;}
-
-		case  'r': if (flagMenu == 1){ xxx->Restart(); flagMenu = 0; } break;
-		case  'q': if (flagMenu == 1){ exit(0); } break;
 	
+	if (flagMenu == 0)
+		xxx->Keyboard(keyx,x,y);
+	else
+		menu.Keyboard(keyx, x, y);
 
-		case 'a':	if (flags == 0){ flags = 5; }	break;	//влево
-		//case 'd':	//if (key != 3){ key = 4; }	break;	//вправо
-		//case 's':	//if (key != 1){ key = 2; }	break;	//вниз
-		//case 'w':	//if (key != 2){ key = 1; }	break;	//вверх
-		//case '=':	//if (ts>10){ ts--; cout << ts << endl; }	break;	//++
-		//case '-':	//ts++; cout << ts << endl;	break;	//--
-		//case '9':	//ap++;;	break;	//++
-		//case '0':	//ap--;;	break;	//--
-		}
-		//flagk = 1;
-	}
-	if (flagMenu == 1)
-	flags = 0;
 }
