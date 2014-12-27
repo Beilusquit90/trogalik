@@ -73,7 +73,7 @@ int _tmain(int argc, char **argv)
 
 void MouseMotin(int x, int y)
 {
-	std::cout << "MouseMotin" << std::endl;
+	//std::cout << "MouseMotin" << std::endl;
 }
 
 void MousePress(int button, int state, int x, int y)

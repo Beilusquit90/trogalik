@@ -6,8 +6,11 @@
 extern int flags;
 extern int flagMenu;
 
+
+
 Shambala::Shambala()
 {
+
 	srand(time(NULL));
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
@@ -24,7 +27,7 @@ Shambala::~Shambala()
 
 void Shambala::MousePress(int button, int  state, int x, int y)
 {
-	TheSeed[flag].MousePress(button, state, x, y);
+	TheSeed[flag].MousePress(button, state, x, y);		
 }
 
 void Shambala::SetMyHero()
@@ -35,7 +38,7 @@ void Shambala::SetMyHero()
 
 void Shambala::sKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
 {
-		
+	if (TheSeed[flag].mflag == 0)
 		switch (keyx)
 		{
 		case GLUT_KEY_LEFT: if (flags == 0){ flags = 3; }	break;	//влево
@@ -48,11 +51,13 @@ void Shambala::sKeyboard(int keyx, int x, int y)// икс и игрик, это 
 
 void Shambala::Keyboard(unsigned char keyx, int x, int y)
 {
+	std::cout << "TheSeed[flag].mflag==0" << TheSeed[flag].mflag<< std::endl;
+	if (TheSeed[flag].mflag == 0)
 		switch (keyx)
-		{
+	{
 		case 27: flagMenu = 1; break;
-		case  'a': flags = 5;  break;	//влево
-		
+		case  'a': TheSeed[flag].SetMF(1); TheSeed[flag].steps.clear();  break;	//влево
+
 			//case 'd':	//if (key != 3){ key = 4; }	break;	//вправо
 			//case 's':	//if (key != 1){ key = 2; }	break;	//вниз
 			//case 'w':	//if (key != 2){ key = 1; }	break;	//вверх
@@ -60,7 +65,9 @@ void Shambala::Keyboard(unsigned char keyx, int x, int y)
 			//case '-':	//ts++; cout << ts << endl;	break;	//--
 			//case '9':	//ap++;;	break;	//++
 			//case '0':	//ap--;;	break;	//--
-		}
+	}
+	else
+		std::cout << "ELSE mflag!=0" << std::endl;
 }
 
 void Shambala::Restart()
@@ -75,7 +82,6 @@ void Shambala::Restart()
 
 int Shambala::Activ()
 {
-	if (TheSeed[flag].ioflag != 0)
 	{
 		if (TheSeed[flag].ioflag == 1)
 		{
@@ -149,7 +155,7 @@ void Shambala::HeroSteps()
 		if (flags == 2){ temp = TheSeed[flag].Move(MyLovelyHero.cx + 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
 		if (flags == 3){ temp = TheSeed[flag].Move(MyLovelyHero.cx, MyLovelyHero.cy - 1, &MyLovelyHero); flags = 0; }
 		if (flags == 4){ temp = TheSeed[flag].Move(MyLovelyHero.cx - 1, MyLovelyHero.cy, &MyLovelyHero); flags = 0; }
-		if (flags == 5){ temp = TheSeed[flag].Shot(&MyLovelyHero, 2); flags = 0; }
+		
 	}
 	else
 	{

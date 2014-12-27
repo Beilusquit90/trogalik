@@ -9,7 +9,6 @@
 
 
 
-
 extern TileTextures tails;
 extern const int sizeMap;
 extern double mx;		//мышка икс
@@ -17,8 +16,17 @@ extern double my;		//мышка игрик
 int wWidth = 800;    //высота
 int wHeight = 800;    //ширина
 
+
+
+namespace MouseSpace
+{
+	
+}
+
+
 RuinesMap::RuinesMap()
 {
+	mflag = 0;
 	ioflag = 0;
 	lvl = 1;
 	for (int i = 0; i < sizeMap; i++)
@@ -40,6 +48,7 @@ RuinesMap::RuinesMap()
 
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
+	mflag = rhs.mflag;
 	ioflag = rhs.ioflag;
 	RL = rhs.RL;
 	vDoor = rhs.vDoor;
@@ -64,11 +73,13 @@ void RuinesMap::operator=(RuinesMap&rhs)
 	}
 	lvl = rhs.lvl;
 	ioflag = rhs.ioflag;
+	mflag = rhs.mflag;
 	//test();
 }
 
 RuinesMap::RuinesMap(int _lvl)
 {
+	mflag = 0;
 	ioflag = 0;
 	lvl = _lvl;
 	for (int i = 0; i < sizeMap; i++)
@@ -93,6 +104,7 @@ RuinesMap::~RuinesMap()
 
 void RuinesMap::MousePress(int button, int  state, int x, int y)
 {
+	int f = 0;
 	int z = wHeight / 30;
 	int xpos = wWidth / 5;
 	int ypos = wHeight / 5;
@@ -100,18 +112,67 @@ void RuinesMap::MousePress(int button, int  state, int x, int y)
 	int yypos = ypos + (z * 17) - 4;
 	int tx = mx / z;
 	int ty = my / z;
-	switch (button)
+	int txx = startx + ty - 6;
+	int tyy = starty + tx - 6;
+
+
+
+	if (f == 0)
+	switch (mflag)
 	{
-	case GLUT_LEFT_BUTTON:
+	case 1: f = 1; 
 		
-		if (state)if (mx > xpos&&my > ypos&&mx < xxpos&&my < yypos) if (steps.size()>0)steps.clear();else CreateSteps(tx, ty);
+		switch (button)
+		{
+			case GLUT_LEFT_BUTTON:
+				mMouse(button, state, x, y); f = 0; break;
+			case GLUT_MIDDLE_BUTTON:if (state)f = 0; break;
+			case GLUT_RIGHT_BUTTON:if (state)mflag = 0; f = 0; break;
+		}break;
 
 
-	case GLUT_MIDDLE_BUTTON:if (state) break;
-	case GLUT_RIGHT_BUTTON:if (state) break;
-	default:
+					
+	case 0:
+		switch (button)
+		{
+		case GLUT_LEFT_BUTTON:
+			if (mflag == 0)if (state)if (mx > xpos&&my > ypos&&mx < xxpos&&my < yypos) if (steps.size()>0)steps.clear(); else CreateSteps(tx, ty);
+		case GLUT_MIDDLE_BUTTON:if (state) break;
+		case GLUT_RIGHT_BUTTON:if (state) break;
+		default:					break;
+		}
 		break;
 	}
+}
+
+void RuinesMap::mMouse(int button, int  state, int x, int y)
+{
+	if (state)
+	{
+		int z = wHeight / 30;
+		int xpos = wWidth / 5;
+		int ypos = wHeight / 5;
+		int xxpos = xpos + (z * 17) - 4;
+		int yypos = ypos + (z * 17) - 4;
+		int tx = mx / z;
+		int ty = my / z;
+		int txx = startx + ty - 6;
+		int tyy = starty + tx - 6;
+		std::cout << "DONT SHOOT PLS!" << std::endl;
+		if (txx == MyHero->cx + 1 && tyy == MyHero->cy){ Shot(MyHero, 2); mflag = 0; std::cout << "S1" << std::endl; }
+		if (txx == MyHero->cx + 1 && tyy == MyHero->cy + 1){ Shot(MyHero, 1); mflag = 0; std::cout << "S2" << std::endl; }
+		if (txx == MyHero->cx && tyy == MyHero->cy - 1){ Shot(MyHero, 4); mflag = 0; std::cout << "S3" << std::endl; }
+		if (txx == MyHero->cx && tyy == MyHero->cy + 1){ Shot(MyHero, 0); mflag = 0; std::cout << "S4" << std::endl; }
+		if (txx == MyHero->cx + 1 && tyy == MyHero->cy-1){ Shot(MyHero, 3); mflag = 0; std::cout << "S5" << std::endl; }
+
+		if (txx == MyHero->cx - 1&& tyy == MyHero->cy){ Shot(MyHero, 6); mflag = 0; std::cout << "S6" << std::endl; }
+		if (txx == MyHero->cx - 1&& tyy == MyHero->cy+1){ Shot(MyHero, 7); mflag = 0; std::cout << "S7" << std::endl; }
+		if (txx == MyHero->cx - 1 && tyy == MyHero->cy-1){ Shot(MyHero, 5); mflag = 0; std::cout << "S8" << std::endl; }
+
+
+
+	}
+	std::cout << MyHero->cx << "cx   " << MyHero->cy << "cy" << std::endl;
 }
 
 int RuinesMap::CreateSteps(int tx,int ty)

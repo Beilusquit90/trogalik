@@ -31,8 +31,9 @@ public:
 	~RuinesMap();					//+
 	//конструкторы и прочая лабуда выше.
 
-
+	void SetMF(int x){ mflag = x; }
 	void MousePress(int button, int  state, int x, int y);
+	void mMouse(int button, int  state, int x, int y);
 
 
 	void StepsFind(const Point &start, const Point &finish);
@@ -71,6 +72,7 @@ public:
 
 	void test();
 	int ioflag; 
+	int mflag;
 	std::vector<int>steps;
 private:
 	int levelSize[sizeMap][sizeMap];			//массив содержащий отметки существ.
@@ -86,7 +88,7 @@ private:
 	
 	int startx;
 	int starty;
-
+	
 	int lvl;
 	Body *MyHero;
 };
