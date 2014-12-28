@@ -10,6 +10,7 @@ public:
 	Body(int&_role,int x, int y, int lvl);// получает в качестве параметра левел на котором ГГ, что бы расчитать статы мобов. =)
 	Body(const Body&rhs);
 	~Body();
+
 	void operator=(const Body&rhs);
 	void sKoef();
 	int exp;

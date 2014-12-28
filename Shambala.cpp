@@ -15,11 +15,7 @@ Shambala::Shambala()
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
 	SetMyHero();
-	TheSeed[flag].steps.push_back(1);
-	TheSeed[flag].steps.push_back(2);
-	TheSeed[flag].steps.push_back(3);
 }
-
 
 Shambala::~Shambala()
 {
@@ -32,7 +28,7 @@ void Shambala::MousePress(int button, int  state, int x, int y)
 
 void Shambala::SetMyHero()
 {
-	MyLovelyHero.hp += 100;
+	MyLovelyHero.hp += 1000;
 	TheSeed[0].SetMyHero(MyLovelyHero);
 }
 
@@ -51,7 +47,6 @@ void Shambala::sKeyboard(int keyx, int x, int y)// икс и игрик, это 
 
 void Shambala::Keyboard(unsigned char keyx, int x, int y)
 {
-	std::cout << "TheSeed[flag].mflag==0" << TheSeed[flag].mflag<< std::endl;
 	if (TheSeed[flag].mflag == 0)
 		switch (keyx)
 	{

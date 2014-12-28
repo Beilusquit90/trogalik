@@ -56,6 +56,23 @@ public:
 	void DrawFly();						//отрисовка летящей магии и стрелл.
 	//отрисовка выше
 
+
+
+	//AI ZONE*****************
+	//тут мы собственно разместим все функции относящиеся к аи.
+	void AI(Body*rhs);
+
+	void lowHp(Body*rhs);		//проверка уровня хп.
+	void Heal(Body*rhs);
+	int Scaner(Body*rhs);		//скнанирует по радиусу.
+	int AIPF(Body*rhs);
+
+
+
+	//AI ZONE*****************
+
+
+
 	void PushUp(Body&MyLovelyHero);
 	void PushDown(Body&MyLovelyHero);
 	void SetMyHero(Body&MyLovelyHero);
