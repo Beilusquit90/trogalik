@@ -1,6 +1,7 @@
 ﻿#pragma once
-
 #include "bag.h"
+#include <vector>
+
 
 class Body
 {
@@ -31,7 +32,8 @@ public:
 	double meditationS;  // скорость медитации восстановления маны и хп.
 	double shotS;		// скорость выстрела.
 	double jumpSpeed;	// скорость прыжка назад или вперед.
-	bag inventory;
+	
+	std::vector<bag>inventory;
 	int mana;
 	int maxmana;
 	Body *MyKiller;		//ну ты понял че.

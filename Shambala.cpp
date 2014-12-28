@@ -28,7 +28,7 @@ void Shambala::MousePress(int button, int  state, int x, int y)
 
 void Shambala::SetMyHero()
 {
-	MyLovelyHero.hp += 1000;
+	//MyLovelyHero.hp += 1000;
 	TheSeed[0].SetMyHero(MyLovelyHero);
 }
 
@@ -80,7 +80,7 @@ int Shambala::Activ()
 	{
 		if (TheSeed[flag].ioflag == 1)
 		{
-			if (TheSeed.size() > (flag + 1))
+			if (int(TheSeed.size()) > (flag + 1))
 			{
 				TheSeed[flag].ioflag = 0;
 				flag++;
@@ -117,10 +117,6 @@ int Shambala::Activ()
 	}
 	else
 		MyLovelyHero.tiktak -= 0.2;
-	/*for (auto &x : TheSeed)
-	{
-		x.Activ();
-	}*/
 	TheSeed[flag].Activ();
 	return 0;
 }
@@ -128,12 +124,12 @@ int Shambala::Activ()
 void Shambala::Draw()
 {
 	
-	//TheSeed[flag].Draw();
+//	TheSeed[flag].Draw();
 	
 	TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
 
 	TheSeed[flag].DrawFly();		// выстрелленая магия
-	//TheSeed[flag].DrawInterface();
+	TheSeed[flag].DrawInterface();
 }
 
 

@@ -7,7 +7,7 @@ int flags = 0;
 
 Body::Body()
 {
-	inventory.addr();
+	//inventory.addr();
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0; exp = 0;
 	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.
 	{
@@ -37,7 +37,7 @@ Body::Body(Body *rhs){
 
 Body::Body(int&_role,int x,int y,int lvl):cx(x),cy(y) //раскидываем статы, в зависимости от уровня подземелья.
 {
-	inventory.addr();
+	//inventory.addr();
 	exp = lvl * 10;
 	hp = 1; ag = 1; str = 1; intel = 1; tiktak = 0;
 	switch (role = rand() % 3 + 1) // 1 воин. 2 лучник . 3 маг.

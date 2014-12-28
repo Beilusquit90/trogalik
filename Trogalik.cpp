@@ -144,5 +144,4 @@ void Keyboard(unsigned char keyx, int x, int y)// икс и игрик, это �
 		xxx->Keyboard(keyx,x,y);
 	else
 		menu.Keyboard(keyx, x, y);
-
 }
