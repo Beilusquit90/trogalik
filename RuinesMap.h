@@ -62,11 +62,15 @@ public:
 	//тут мы собственно разместим все функции относящиеся к аи.
 	void AI(Body*rhs);
 
-	void Archer(Body*rhs);
+
 	void lowHp(Body*rhs);		//проверка уровня хп.
 	void Heal(Body*rhs);
-	int Scaner(Body*rhs);		//скнанирует по радиусу.
-	int AIPF(Body*rhs);
+	int Scaner(Body*rhs,int r);		//скнанирует по радиусу.
+	
+	
+	int AIPF(Body*rhs);		
+	void Archer(Body*rhs);
+	int AFP(Body*rhs);
 
 	void DangerBirds(int dx, int dy, MAmap&bird);
 	void ClearTactikMap();
@@ -100,7 +104,7 @@ private:
 	int Patch[sizeMap][sizeMap];
 
 	int TactikMap[sizeMap][sizeMap];
-
+	int ShotMap[sizeMap][sizeMap];
 	std::vector<MAmap>vMA;
 	std::vector<Body>vBody;	
 	std::vector<TheDoor>vDoor;

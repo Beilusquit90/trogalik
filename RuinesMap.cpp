@@ -1118,14 +1118,14 @@ void RuinesMap::AI(Body*rhs)
 	if (TactikMap[rhs->cx][rhs->cy] != 1)
 	{
 		lowHp(rhs);
-		switch (Scaner(rhs))
+		switch (Scaner(rhs,10))
 		{
 		case 0:rMove(*rhs); break;	// когда мы не видим врага.
 		case 1:
 			switch (rhs->role)// 1 воин. 2 лучник . 3 маг.
 			{
 			case 1: AIPF(rhs); break;
-			case 2: AIPF(rhs); break;
+			case 2: if (Scaner(rhs, 7))Archer(rhs); AFP(rhs); break;
 			case 3: AIPF(rhs); break;
 			default:break;
 			}
@@ -1149,14 +1149,75 @@ void RuinesMap::AI(Body*rhs)
 	}
 }
 
-void RuinesMap::Archer(Body*rhs)
+int RuinesMap::AFP(Body*rhs)
 {
+	int xx = MyHero->cx - rhs->cx;
+	int yy = MyHero->cy - rhs->cy;
 
+	if (ShotMap[rhs->cx][rhs->cy] == 1)
+	{
+		if (xx == 0 && yy > 0)Shot(rhs, 0);
+		else if (xx > 0 && yy > 0)Shot(rhs, 1);
+		else if (xx > 0 && yy == 0)Shot(rhs, 2);
+		else if (xx > 0 && yy < 0)Shot(rhs, 3);
+		else if (xx == 0 && yy < 0)Shot(rhs, 4);
+		else if (xx < 0 && yy < 0)Shot(rhs, 5);
+		else if (xx < 0 && yy == 0)Shot(rhs, 6);
+		else if (xx < 0 && yy > 0)Shot(rhs, 7);
+		else if (Scaner(rhs, 1)){ Move(MyHero->cx, MyHero->cy, rhs); }
+	}
+	
+	else if (ShotMap[rhs->cx][rhs->cy + 1] == 1 && levelSize[rhs->cx][rhs->cy + 1] == 0)Move(rhs->cx, rhs->cy + 1, rhs);
+	else if (ShotMap[rhs->cx + 1][rhs->cy + 1] == 1 && levelSize[rhs->cx + 1][rhs->cy + 1])Move(rhs->cx + 1, rhs->cy + 1, rhs);
+	else if (ShotMap[rhs->cx + 1][rhs->cy] != 1 && levelSize[rhs->cx + 1][rhs->cy])Move(rhs->cx + 1, rhs->cy, rhs);
+	else if (ShotMap[rhs->cx + 1][rhs->cy - 1] == 1 && levelSize[rhs->cx+1][rhs->cy - 1])Move(rhs->cx + 1, rhs->cy - 1, rhs);
+	else if (ShotMap[rhs->cx][rhs->cy - 1] == 1 && levelSize[rhs->cx][rhs->cy - 1])Move(rhs->cx, rhs->cy - 1, rhs);
+	else if (ShotMap[rhs->cx - 1][rhs->cy - 1] == 1 && levelSize[rhs->cx-1][rhs->cy - 1])Move(rhs->cx - 1, rhs->cy - 1, rhs);
+	else if (ShotMap[rhs->cx - 1][rhs->cy] == 1 && levelSize[rhs->cx-1][rhs->cy])Move(rhs->cx - 1, rhs->cy, rhs);
+	else if (ShotMap[rhs->cx - 1][rhs->cy + 1] == 1 && levelSize[rhs->cx-1][rhs->cy + 1])Move(rhs->cx - 1, rhs->cy + 1, rhs);
+	else AIPF(rhs);
+	
+	return 0;
 }
 
-int RuinesMap::Scaner(Body*rhs)
+void RuinesMap::Archer(Body*rhs)
 {
-	int radius = 10;
+	for (int i = 0; i < sizeMap; i++)
+	for (int j = 0; j < sizeMap; j++)
+	if (levelSize[i][j] == 999) ShotMap[i][j] = levelSize[i][j];
+	else ShotMap[i][j] = 0;
+	ShotMap[MyHero->cx][MyHero->cy] = 1;
+	int xx = MyHero->cx;
+	int yy = MyHero->cy;
+	for (int i = 0; i < 7 && ShotMap[xx][++yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[++xx][++yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[++xx][yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[++xx][--yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[xx][--yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[--xx][--yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[--xx][yy] != 999; i++) ShotMap[xx][yy] = 1;
+	yy = MyHero->cy; xx = MyHero->cx;
+	for (int i = 0; i < 7 && ShotMap[--xx][++yy] != 999; i++) ShotMap[xx][yy] = 1;
+
+	/*for (int i = 0; i < sizeMap; i++){
+	for (int j = 0; j < sizeMap; j++)
+	{
+		if (levelSize[i][j]!=999)std::cout << ShotMap[i][j];
+		else std::cout << "*";
+	}
+	std::cout << std::endl;
+	}*/
+}
+
+int RuinesMap::Scaner(Body*rhs,int r)
+{
+	int radius = r;
 	if (abs((rhs->cx) - (MyHero->cx)) < radius && abs((rhs->cy) - (MyHero->cy)) < radius)
 		return 1;
 	else
