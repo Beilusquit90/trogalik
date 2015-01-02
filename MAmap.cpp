@@ -9,6 +9,7 @@ MAmap::MAmap(Body*rhs, int dir, Meffects eff, int r) :direction(dir), Attacker(r
 	cx = Attacker->cx;
 	cy = Attacker->cy;
 	life = 1;
+	tiktak = 0;
 	if (eff == Arrow)
 	{
 		//dmg = (Attacker->ag / 2) + (Attacker->str / 4);

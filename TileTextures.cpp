@@ -26,9 +26,10 @@ void TileTextures::LoadTextures()
 	AUX_RGBImageRec *texture6 = auxDIBImageLoadA("6.bmp");
 	AUX_RGBImageRec *texture7 = auxDIBImageLoadA("7.bmp");
 	AUX_RGBImageRec *menu = auxDIBImageLoadA("Menu.bmp");
+	AUX_RGBImageRec *bowman = auxDIBImageLoadA("bowman.bmp");
 
 
-	glGenTextures(8, &textures[0]);		// первый элемент, сколько загружаем текстур. второй ссылка, на первый элемент массива
+	glGenTextures(9, &textures[0]);		// первый элемент, сколько загружаем текстур. второй ссылка, на первый элемент массива
 
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -69,6 +70,11 @@ void TileTextures::LoadTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, menu->sizeX, menu->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, menu->data);
+
+	glBindTexture(GL_TEXTURE_2D, textures[8]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, bowman->sizeX, bowman->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, bowman->data);
 }
 
 void TileTextures::DrawMouse()

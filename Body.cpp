@@ -131,8 +131,6 @@ void Body::operator=(const Body&rhs)
 
 void Body::sKoef()
 {
-
-	
 	colldownS = (50 - intel / 2)*0.01;						// скорость на колдунство.
 	attackS = (50 - (ag / 2))*0.01;						// скорость физ атаки.
 	fizCDS = (100 - ((ag / 4) + (str / 4)))*0.01;		// скорость физ умений.

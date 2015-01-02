@@ -124,7 +124,7 @@ int Shambala::Activ()
 void Shambala::Draw()
 {
 	
-//	TheSeed[flag].Draw();
+	//TheSeed[flag].Draw();
 	
 	TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
 

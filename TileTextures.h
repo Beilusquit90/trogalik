@@ -6,6 +6,6 @@ public:
 	~TileTextures();
 	void LoadTextures();
 	void DrawMouse();
-	unsigned int textures[8];
+	unsigned int textures[9];
 };
 

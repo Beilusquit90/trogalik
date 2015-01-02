@@ -68,6 +68,8 @@ public:
 	int Scaner(Body*rhs,int r);		//скнанирует по радиусу.
 	
 	
+	int CheckDir(int, Body*rhs);		// не стреляйте своих.
+	void CTM();		//Clear Tactik Map
 	int AIPF(Body*rhs);		
 	void Archer(Body*rhs);
 	int AFP(Body*rhs);
