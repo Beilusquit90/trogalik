@@ -96,7 +96,7 @@ void initialize() //говорящее название
 	tails.LoadTextures();
 	
 	glEnable(GL_TEXTURE_2D);
-	
+
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

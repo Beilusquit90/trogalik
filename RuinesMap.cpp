@@ -818,6 +818,7 @@ void RuinesMap::DrawInterface()
 	}
 }
 
+
 int RuinesMap::Draw()
 {
 	int x = 0, y = 0;

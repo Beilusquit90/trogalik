@@ -48,7 +48,6 @@ public:
 	int Shot(Body*rhs, int dir);
 	void WhoDie();
 	// обсчет всяких действий и действия выше.
-	
 
 	void DrawInterface();
 	int Draw();
