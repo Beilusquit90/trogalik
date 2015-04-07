@@ -49,6 +49,7 @@ public:
 	void WhoDie();
 	// обсчет всяких действий и действия выше.
 
+	void DrawGamePanel();
 	void DrawInterface();
 	int Draw();
 	void WhatIsee();					//функция отрисовки того что видим.
@@ -97,6 +98,18 @@ public:
 	int ioflag; 
 	int mflag;
 	std::vector<int>steps;
+
+
+	int cursx;
+	int cursy;
+
+	float tempmx;
+	float tempmy;
+
+	float tempTransx;
+	float tempTransy;
+	bool restartFlag;
+
 private:
 	int levelSize[sizeMap][sizeMap];			//массив содержащий отметки существ.
 	int MMA[sizeMap][sizeMap];				//Массовая магия, особая так сказать...
@@ -116,4 +129,7 @@ private:
 	
 	int lvl;
 	Body *MyHero;
+
+
+
 };

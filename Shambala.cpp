@@ -6,7 +6,8 @@
 extern int flags;
 extern int flagMenu;
 
-
+extern double mx;		//мышка икс
+extern double my;		//мышка игрик
 
 Shambala::Shambala()
 {
@@ -30,6 +31,7 @@ void Shambala::SetMyHero()
 {
 	//MyLovelyHero.hp += 1000;
 	TheSeed[0].SetMyHero(MyLovelyHero);
+
 }
 
 void Shambala::sKeyboard(int keyx, int x, int y)// икс и игрик, это координаты мышки.
@@ -65,14 +67,25 @@ void Shambala::Keyboard(unsigned char keyx, int x, int y)
 		std::cout << "ELSE mflag!=0" << std::endl;
 }
 
+
 void Shambala::Restart()
 {
+	std::cout << "Restart" << std::endl;
+
+	//std::cout << "TheSeed[flag].tempmy  " << TheSeed[flag].tempmy << std::endl;
+//	std::cout << "TheSeed[flag].tempmx  " << TheSeed[flag].tempmx << std::endl;
 	TheSeed.clear();
 	TheSeed.push_back(RuinesMap(1));
 	flag = 0;
+	//TheSeed[flag].tempTransx
+	
+	
 
 	MyLovelyHero =Body();
 	SetMyHero();
+	//glTranslatef((TheSeed[flag].tempTransx), (TheSeed[flag].tempTransy), 0);
+	
+	glTranslatef(-(MyLovelyHero.cy * 50 - 350), -(MyLovelyHero.cx * 50 - 350), 0);
 }
 
 int Shambala::Activ()
@@ -124,12 +137,13 @@ int Shambala::Activ()
 void Shambala::Draw()
 {
 	
-	//TheSeed[flag].Draw();
-	
-	TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
+	TheSeed[flag].Draw();
 
-	TheSeed[flag].DrawFly();		// выстрелленая магия
+	//TheSeed[flag].WhatIsee();		// на данный момент живчики и стены
 	TheSeed[flag].DrawInterface();
+	TheSeed[flag].DrawFly();		// выстрелленая магия
+	TheSeed[flag].DrawGamePanel();
+
 }
 
 

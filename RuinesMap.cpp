@@ -16,6 +16,12 @@ int wHeight = 800;    //ширина
 
 RuinesMap::RuinesMap()
 {
+	restartFlag = 0;
+	tempTransx = 0;
+	tempTransy = 0;
+
+	tempmx = cursx;
+	tempmy = cursy;
 	mflag = 0;
 	ioflag = 0;
 	lvl = 1;
@@ -34,10 +40,23 @@ RuinesMap::RuinesMap()
 	}
 	Doors();
 	//test();
+	cursx = 0;
+
+	cursy = 0;
 }
 
 RuinesMap::RuinesMap(const RuinesMap&rhs)
 {
+	restartFlag = rhs.restartFlag;
+	tempTransx = rhs.tempTransx;
+	tempTransy = rhs.tempTransy;
+
+	tempmx = rhs.tempmx;
+	tempmy = rhs.tempmy;
+
+	cursx = rhs.cursx;
+	cursy = rhs.cursy;
+
 	mflag = rhs.mflag;
 	ioflag = rhs.ioflag;
 	RL = rhs.RL;
@@ -64,11 +83,24 @@ void RuinesMap::operator=(RuinesMap&rhs)
 	lvl = rhs.lvl;
 	ioflag = rhs.ioflag;
 	mflag = rhs.mflag;
+	cursx = rhs.cursx;
+	cursy = rhs.cursy;
+
+	tempmx = rhs.tempmx;
+	tempmy = rhs.tempmy;
+
+
+	tempTransx = rhs.tempTransx;
+	tempTransy = rhs.tempTransy;
+	restartFlag = rhs.restartFlag;
 	//test();
 }
 
 RuinesMap::RuinesMap(int _lvl)
 {
+	tempTransx=0;
+	tempTransy=0;
+	restartFlag = 1;
 	mflag = 0;
 	ioflag = 0;
 	lvl = _lvl;
@@ -84,6 +116,12 @@ RuinesMap::RuinesMap(int _lvl)
 		NewMapMan();
 	}
 	Doors();
+	
+	tempmx = cursx;
+	tempmy = cursy;
+
+	//cursx = MyHero->cx * 50;
+	//cursy = MyHero->cy * 50;
 	//test();
 }
 
@@ -95,13 +133,13 @@ RuinesMap::~RuinesMap()
 void RuinesMap::MousePress(int button, int  state, int x, int y)
 {
 	int f = 0;
-	int z = wHeight / 30;
+	int z = 50;
 	int xpos = wWidth / 5;
 	int ypos = wHeight / 5;
 	int xxpos = xpos + (z * 17) - 4;
 	int yypos = ypos + (z * 17) - 4;
-	int tx = mx / z;
-	int ty = my / z;
+	int tx = cursx / z;
+	int ty = cursy / z;
 	int txx = startx + ty - 6;
 	int tyy = starty + tx - 6;
 
@@ -114,7 +152,7 @@ void RuinesMap::MousePress(int button, int  state, int x, int y)
 			switch (button)
 			{
 			case GLUT_LEFT_BUTTON:
-				mMouse(button, state, x, y); f = 0; break;
+				mMouse(button, state, cursx / z, cursy / z); f = 0; break;
 			case GLUT_MIDDLE_BUTTON:if (state)f = 0; break;
 			case GLUT_RIGHT_BUTTON:if (state)mflag = 0; f = 0; break;
 			}break;
@@ -129,7 +167,7 @@ void RuinesMap::MousePress(int button, int  state, int x, int y)
 					//if ((abs(tx - MyHero->cx) + abs(ty - MyHero->cy)) <= 2 && (abs(tx - MyHero->cx) <= 1 && abs(ty - MyHero->cy) <= 1)){ Move(tx, ty, MyHero); std::cout << "******" << std::endl;  }
 					//else
 				if (steps.size()>0)steps.clear();
-				else CreateSteps(tx, ty); break;
+				else CreateSteps(cursx/z, cursy/z); break;
 			case GLUT_MIDDLE_BUTTON:if (state) break;
 			case GLUT_RIGHT_BUTTON:if (state) break;
 			default:					break;
@@ -140,49 +178,41 @@ void RuinesMap::MousePress(int button, int  state, int x, int y)
 
 void RuinesMap::mMouse(int button, int  state, int x, int y)
 {
-
 	//Магия нажатия мышкой.
 	if (state)
 	{
-		int z = wHeight / 30;
-		int xpos = wWidth / 5;
-		int ypos = wHeight / 5;
-		int xxpos = xpos + (z * 17) - 4;
-		int yypos = ypos + (z * 17) - 4;
-		int tx = mx / z;
-		int ty = my / z;
-		int txx = startx + ty - 6;
-		int tyy = starty + tx - 6;
-		if (txx == MyHero->cx + 1 && tyy == MyHero->cy){ Shot(MyHero, 2); mflag = 0; }
-		else if (txx == MyHero->cx + 1 && tyy == MyHero->cy + 1){ Shot(MyHero, 1); mflag = 0; }
-		else if (txx == MyHero->cx && tyy == MyHero->cy - 1){ Shot(MyHero, 4); mflag = 0; }
-		else if (txx == MyHero->cx && tyy == MyHero->cy + 1){ Shot(MyHero, 0); mflag = 0; }
-		else if (txx == MyHero->cx + 1 && tyy == MyHero->cy - 1){ Shot(MyHero, 3); mflag = 0; }
-		else if (txx == MyHero->cx - 1 && tyy == MyHero->cy){ Shot(MyHero, 6); mflag = 0; }
-		else if (txx == MyHero->cx - 1 && tyy == MyHero->cy + 1){ Shot(MyHero, 7); mflag = 0; }
-		else if (txx == MyHero->cx - 1 && tyy == MyHero->cy - 1){ Shot(MyHero, 5); mflag = 0; }
-
-
-
+		if (x == MyHero->cx + 1 && y == MyHero->cy){ Shot(MyHero, 2); mflag = 0; }
+		else if (x == MyHero->cx + 1 && y == MyHero->cy + 1){ Shot(MyHero, 1); mflag = 0; }
+		else if (x == MyHero->cx && y == MyHero->cy - 1){ Shot(MyHero, 4); mflag = 0; }
+		else if (x == MyHero->cx && y == MyHero->cy + 1){ Shot(MyHero, 0); mflag = 0; }
+		else if (x == MyHero->cx + 1 && y == MyHero->cy - 1){ Shot(MyHero, 3); mflag = 0; }
+		else if (x == MyHero->cx - 1 && y == MyHero->cy){ Shot(MyHero, 6); mflag = 0; }
+		else if (x == MyHero->cx - 1 && y == MyHero->cy + 1){ Shot(MyHero, 7); mflag = 0; }
+		else if (x == MyHero->cx - 1 && y == MyHero->cy - 1){ Shot(MyHero, 5); mflag = 0; }
 	}
 }
 
 int RuinesMap::CreateSteps(int tx, int ty)
 {
+	int _tx = abs(tx - MyHero->cx), _ty = abs(ty - MyHero->cy);
+	if (_tx+_ty)
+	if (_tx<2&&_ty<2)
+	{
+		Move(tx, ty, MyHero);
+		return 0;
+	}
+	
 
-	int txx = startx + ty - 6;
-	int tyy = starty + tx - 6;
-
-	if (levelSize[txx][tyy] == 999){ return 0; }
+	if (levelSize[tx][ty] == 999){ return 0; }
 
 	Point start(MyHero->cx, MyHero->cy);
-	Point end(txx, tyy);
+	Point end(tx, ty);
 	StepsFind(start, end);
 
 	int xx = MyHero->cx;
 	int yy = MyHero->cy;
 	Patch[xx][yy] = 0;
-	std::cout << "patch start" << std::endl;
+	//std::cout << "patch start" << std::endl;
 	for (;;)
 	{
 		if (Patch[xx][yy + 1] == 1){ steps.push_back(1); Patch[xx][yy] = 0; yy++;  continue; };
@@ -211,7 +241,7 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 #define LEFT Patch[i - 1][j]
 #define RIGHT Patch[i + 1][j]
 
-	std::cout << "START STEP FINDS" << std::endl;
+	//std::cout << "START STEP FINDS" << std::endl;
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 		Patch[i][j] = -3;
@@ -222,6 +252,7 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 
 	Patch[finish.x][finish.y] = 0;
 
+	int zflag = 0;
 	for (int z = 0; Patch[start.x][start.y] == (-3); z++)
 	{
 		for (int i = 0; i < sizeMap; i++)
@@ -237,64 +268,66 @@ void RuinesMap::StepsFind(const Point &start, const Point &finish)
 			if (LEFT == -3)	LEFT = (z + 1);
 			if (TOP_LEFT == -3)	TOP_LEFT = (z + 1);
 		}
-		if (z > 150){
-			std::cout << "I fixed this bag later... Room without doors." << std::endl; break;}
+		if (z > 300)
+			zflag = 1;
 	}
 
 
-
-	int temp[sizeMap][sizeMap];
-	for (int i = sizeMap - 1; i >= 0; i--)
-	for (int j = sizeMap - 1; j >= 0; j--)
-		temp[i][j] = 0;
-
-	for (int i = sizeMap - 1; i >= 0; i--)
-	for (int j = sizeMap - 1; j >= 0; j--)
-	if (levelSize[i][j] == 999) temp[i][j] = 9;
-
-
-	int tx = start.x;
-	int ty = start.y;
-
-
-	for (; Patch[tx][ty] != 0;)
+	if (zflag == 0)
 	{
-		int t = Patch[tx][ty] - 1;
+		int temp[sizeMap][sizeMap];
+		for (int i = sizeMap - 1; i >= 0; i--)
+			for (int j = sizeMap - 1; j >= 0; j--)
+				temp[i][j] = 0;
+
+		for (int i = sizeMap - 1; i >= 0; i--)
+			for (int j = sizeMap - 1; j >= 0; j--)
+				if (levelSize[i][j] == 999) temp[i][j] = 9;
 
 
-		if (Patch[tx][ty + 1] == t){
-			ty++; temp[tx][ty] = 1;
+		int tx = start.x;
+		int ty = start.y;
+
+
+		for (; Patch[tx][ty] != 0;)
+		{
+			int t = Patch[tx][ty] - 1;
+
+
+			if (Patch[tx][ty + 1] == t){
+				ty++; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx + 1][ty] == t){
+				tx++; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx][ty - 1] == t){
+				ty--; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx - 1][ty] == t){
+				tx--; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx + 1][ty + 1] == t){
+				tx++; ty++; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx + 1][ty - 1] == t){
+				tx++; ty--; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx - 1][ty - 1] == t){
+				tx--; ty--; temp[tx][ty] = 1;
+			}
+			else if (Patch[tx - 1][ty + 1] == t){
+				tx--; ty++; temp[tx][ty] = 1;
+			}
 		}
-		else if (Patch[tx + 1][ty] == t){
-			tx++; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx][ty - 1] == t){
-			ty--; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx - 1][ty] == t){
-			tx--; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx + 1][ty + 1] == t){
-			tx++; ty++; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx + 1][ty - 1] == t){
-			tx++; ty--; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx - 1][ty - 1] == t){
-			tx--; ty--; temp[tx][ty] = 1;
-		}
-		else if (Patch[tx - 1][ty + 1] == t){
-			tx--; ty++; temp[tx][ty] = 1;
-		}
+
+		for (int i = 0; i < sizeMap; i++)
+			for (int j = 0; j < sizeMap; j++)
+				Patch[i][j] = 0;
+
+		for (int i = 0; i < sizeMap; i++)
+			for (int j = 0; j < sizeMap; j++)
+				Patch[i][j] = temp[i][j];
 	}
-
-	for (int i = 0; i < sizeMap; i++)
-	for (int j = 0; j < sizeMap; j++)
-		Patch[i][j] = 0;
-
-	for (int i = 0; i < sizeMap; i++)
-	for (int j = 0; j < sizeMap; j++)
-		Patch[i][j] = temp[i][j];
 }
 
 void RuinesMap::Doors()	// рандомно пихает дверушку.
@@ -544,6 +577,7 @@ void RuinesMap::WhoDie()
 	}
 }
 
+
 void RuinesMap::ClearTactikMap()
 {
 	for (int i = 0; i < sizeMap; i++)
@@ -554,8 +588,7 @@ void RuinesMap::ClearTactikMap()
 
 void RuinesMap::DangerBirds(int dx, int dy, MAmap&bird)
 {
-	std::cout << bird.direction << std::endl;
-
+	
 	TactikMap[dx][dy] = 1;
 	switch (bird.direction)
 	{
@@ -627,15 +660,18 @@ int RuinesMap::fly(MAmap&bird)
 {
 	bird.tiktak += 0.2;
 	int dx, dy;
-	if (bird.direction == 0){ dx = bird.cx;	dy = bird.cy + 1; }
-	else if (bird.direction == 1){ dx = bird.cx + 1;	dy = bird.cy + 1; }
-	else if (bird.direction == 2){ dx = bird.cx + 1;	dy = bird.cy; }
-	else if (bird.direction == 3){ dx = bird.cx + 1;	dy = bird.cy - 1; }
-	else if (bird.direction == 4){ dx = bird.cx;	dy = bird.cy - 1; }
-	else if (bird.direction == 5){ dx = bird.cx - 1;	dy = bird.cy - 1; }
-	else if (bird.direction == 6){ dx = bird.cx - 1;	dy = bird.cy; }
-	else if (bird.direction == 7){ dx = bird.cx - 1;	dy = bird.cy + 1; }
-
+	switch (bird.direction)
+	{
+	case 0:{ dx = bird.cx;	dy = bird.cy + 1;  }break;
+	case 1:{ dx = bird.cx + 1;	dy = bird.cy + 1; }break;
+	case 2:{ dx = bird.cx + 1;	dy = bird.cy;  }break;
+	case 3:{ dx = bird.cx + 1;	dy = bird.cy - 1; }break;
+	case 4:{ dx = bird.cx;	dy = bird.cy - 1; }break;
+	case 5:{ dx = bird.cx - 1;	dy = bird.cy - 1; }break;
+	case 6:{ dx = bird.cx - 1;	dy = bird.cy; }break;
+	case 7:{ dx = bird.cx - 1;	dy = bird.cy + 1; }break;
+	default: std::cout << "Danger in Fly(Mamap&Bird)" << std::endl; break;
+	}
 	if (levelSize[dx][dy] == 999 || levelSize[dx][dy] == 666 || levelSize[dx][dy] == 777){
 		bird.life = 0; return 0;
 	}
@@ -657,9 +693,6 @@ int RuinesMap::fly(MAmap&bird)
 		bird.cx = dx;
 		bird.cy = dy;
 		MA[dx][dy] = bird.effect;
-		std::cout << "basda" << bird.tiktak << std::endl;
-	
-		std::cout << "basda" << bird.tiktak << std::endl;
 		DangerBirds(dx, dy, bird);	//ставим метки на тактическую карту
 		return 0;
 	}
@@ -718,14 +751,25 @@ void RuinesMap::SetMyHero(Body&MyLovelyHero)
 			levelSize[cx][cy] = MyLovelyHero.role;
 			MyLovelyHero.cx = cx;
 			MyLovelyHero.cy = cy;
-			std::cout << "SetMyHero" << std::endl;
+			
+			std::cout << "SetMyHeros" << std::endl;
 			break;
 		}
 	}
+	cursx = MyLovelyHero.cx * 50;
+	cursy = MyLovelyHero.cy * 50;
+	std::cout << "cursx " << cursx << std::endl;
+	std::cout << "cursy " << cursy << std::endl;
+	std::cout << "MyLovelyHero.cx " << MyLovelyHero.cx << std::endl;
+	std::cout << "MyLovelyHero.cy " << MyLovelyHero.cy << std::endl;
+
+	tempmx = cursx;
+	tempmy = cursy;
 }
 
 void RuinesMap::PushUp(Body&MyLovelyHero) //функция выбирающая расположение для нас, когда мы появляемся на этаж вверх.
 {
+	restartFlag = 1;
 	MyHero = &MyLovelyHero;
 
 	for (auto &x : vDoor)
@@ -746,6 +790,7 @@ void RuinesMap::PushUp(Body&MyLovelyHero) //функция выбирающая 
 
 void RuinesMap::PushDown(Body&MyLovelyHero)//функция выбирающая расположение для нас, когда мы появляемся на этаж вниз.
 {
+	restartFlag = 1;
 	MyHero = &MyLovelyHero;
 
 	for (auto &x : vDoor)
@@ -797,32 +842,95 @@ void RuinesMap::NewMapMan()
 
 void RuinesMap::DrawInterface()
 {
-	int z = wHeight / 30;
-	int tx = mx / z;
-	int ty = my / z;
-	int xpos = wWidth / 5;
-	int ypos = wHeight / 5;
-	int xxpos = xpos + (z * 17) - 4;
-	int yypos = ypos + (z * 17) - 4;
+	int z = 50;
+	int tx = cursx / z;
+	int ty = cursy / z;
+	tx = tx*z;
+	ty = ty*z;
+	//int xpos = wWidth / 5;
+	//int ypos = wHeight / 5;
+	//int xxpos = xpos + (z * 17) - 4;
+	//int yypos = ypos + (z * 17) - 4;
 
-	if (mx>xpos&&my>ypos&&mx<xxpos&&my<yypos)
-	{
+
+	//if (mx>xpos&&my>ypos&&mx<xxpos&&my<yypos)
+	//{
 		glBegin(GL_LINES);
+
 		glColor3f(1, 0, 0);
-		glVertex2f(tx*z, ty*z);
-		glVertex2f(tx*z, (ty*z) + z);
-		glVertex2f(tx*z, (ty*z) + z);
-		glVertex2f((tx*z) + z, (ty*z) + z);
+
+	/*	glVertex2f(cursy, cursx);
+		glVertex2f(cursy, (cursx)+z);
+		glVertex2f(cursy, (cursx)+z);
+		glVertex2f((cursy)+z, (cursx)+z); */
+
+		glVertex2f(ty, tx);
+		glVertex2f(ty, (tx)+z);
+		glVertex2f(ty, (tx)+z);
+		glVertex2f((ty)+z, (tx)+z);
 		glColor3f(1, 1, 1);
 		glEnd();
-	}
+
+		
+
+		
+		
+		//std::cout << "MX " << mx << "/nMY " << my << std::endl;
+		
+		glutWarpPointer(500, 500);
+	//}
+}
+
+void RuinesMap::DrawGamePanel()
+{
+	glBindTexture(GL_TEXTURE_2D, tails.textures[9]);	//рожа
+	glBegin(GL_QUADS);
+	glColor3f(1, 1, 1);
+	glTexCoord2f(0.0, 0.0); glVertex2f(tempTransy, tempTransx);
+	glTexCoord2f(0.0, 1.0); glVertex2f(tempTransy, tempTransx + 200);
+	glTexCoord2f(1.0, 1.0); glVertex2f(tempTransy + 800, tempTransx + 200);
+	glTexCoord2f(1.0, 0.0); glVertex2f(tempTransy + 800, tempTransx);
+	glColor3f(1, 1, 1);
+	glEnd();
 }
 
 
 int RuinesMap::Draw()
 {
-	int x = 0, y = 0;
-	int z = wHeight / sizeMap;
+	
+	int z = 50;
+	float s = 0.4;
+	static float tx;
+	static float ty;
+	if (restartFlag)
+	{
+		tx = MyHero->cx;
+		cursx = tx*z;
+		ty = MyHero->cy;
+		cursy = ty*z;
+		std::cout << "Teleportation complite sir!" << std::endl;
+		restartFlag = 0;
+	}
+
+	if (tx < cursx / z - 10)				tx += s; 
+	else	if (tx > cursx / z + 10)		tx -= s;
+
+	if (ty < cursy / z - 10)				ty += s; 
+	else	if (ty > cursy / z + 10)		ty -= s; 
+
+	if (mx != 500 && my != 500)
+	{
+		cursy += (mx - 500);
+		cursx += (my - 300);
+	}
+
+			
+	glTranslatef(-(ty * z - 350), -(tx * z - 350), 0);
+	tempTransx = (tx * z - 350);
+	tempTransy = (ty * z - 350);
+	//std::cout << "-(ty * z - 350)    " << -(ty * z - 350) << std::endl << "-(tx * z - 350) " << -(tx * z - 350) << std::endl;
+	//std::cout << "tempTransx " << tempTransx << std::endl << "tempTransy " << tempTransy << std::endl;
+
 	for (int i = 0; i < sizeMap; i++)
 	for (int j = 0; j < sizeMap; j++)
 	{
@@ -831,20 +939,22 @@ int RuinesMap::Draw()
 
 			switch (levelSize[j][i])
 			{
-			case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
-			case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
-			case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;
-			case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
-			case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;
-			case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]);	 break;	// стена.
-			default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]);	 break;
+			case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;	//рожа
+			case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[8]); break;	//рожа
+			case 3:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;  //рожа
+			case 4:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;  //рожа
+			case 9:glBindTexture(GL_TEXTURE_2D, tails.textures[4]); break;		//герой
+			case 999:glBindTexture(GL_TEXTURE_2D, tails.textures[2]); break;	// стена.
+			case 666:glBindTexture(GL_TEXTURE_2D, tails.textures[6]); break;	//вниз
+			case 777:glBindTexture(GL_TEXTURE_2D, tails.textures[5]); break;	//вверх
+			default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;    //рожа
 			}
 			glBegin(GL_QUADS);
+			glColor3f(1, 1, 1);
 			glTexCoord2f(0.0, 0.0); glVertex2f(i*z, j*z);
 			glTexCoord2f(0.0, 1.0); glVertex2f(i*z, j*z + z);
 			glTexCoord2f(1.0, 1.0); glVertex2f(i*z + z, j*z + z);
 			glTexCoord2f(1.0, 0.0); glVertex2f(i*z + z, j*z);
-			glColor3f(1, 1, 1);
 			glEnd();
 		}
 	}
@@ -855,37 +965,13 @@ int RuinesMap::Draw()
 
 void RuinesMap::DrawFly()
 {
-	int xpos = wWidth / 5;
-	int ypos = wHeight / 5;
-	int z = 800 / 30;
-	int range = 8;
-	int rRange = (range * 2) + 1;
-	int startx;
-	int starty;
-	int ii = 0;
-	int jj = 0;
-
-	if ((MyHero->cx - range) <= 0) startx = 0;
-	else
-	if ((MyHero->cx + range) >= sizeMap)  startx = sizeMap - rRange;
-	else
-		startx = MyHero->cx - range;
-
-
-	if ((MyHero->cy - range) <= 0) starty = 0;
-	else
-	if ((MyHero->cy + range) >= sizeMap)  starty = sizeMap - rRange;
-	else
-		starty = MyHero->cy - range;
-
-
-	for (int i = starty, ii = 0; i < (starty + rRange); i++, ii++)
-	{
-		for (int j = startx, jj = 0; j < (startx + rRange); j++, jj++)
+	int z = 50;
+		for (int ii = 0; ii < sizeMap;  ii++)
+		for (int jj = 0; jj < sizeMap;  jj++)
 		{
-			if (MA[j][i] != 0)
+			if (MA[jj][ii] != 0)
 			{
-				switch (MA[j][i])
+				switch (MA[jj][ii])
 				{
 				case 1:glBindTexture(GL_TEXTURE_2D, tails.textures[3]); break;	//отрисовка стрелы.
 					//case 2:glBindTexture(GL_TEXTURE_2D, tails.textures[1]); break;
@@ -896,16 +982,16 @@ void RuinesMap::DrawFly()
 					//default:glBindTexture(GL_TEXTURE_2D, tails.textures[0]); break;
 				}
 				glBegin(GL_QUADS);
-				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos);
-				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z) + xpos, (jj*z) + ypos + z);
-				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos + z);
-				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z) + xpos + z, (jj*z) + ypos);
+				glTexCoord2f(0.0, 0.0); glVertex2f((ii*z), (jj*z));
+				glTexCoord2f(0.0, 1.0); glVertex2f((ii*z), (jj*z) + z);
+				glTexCoord2f(1.0, 1.0); glVertex2f((ii*z) + z, (jj*z) + z);
+				glTexCoord2f(1.0, 0.0); glVertex2f((ii*z)  + z, (jj*z));
+				//glColor3f(1, 1, 1);
 				glEnd();
 			}
 		}
 	}
 
-}
 
 void RuinesMap::WhatIsee()
 {
@@ -1076,7 +1162,7 @@ void RuinesMap::checkdiag()
 
 void RuinesMap::PatchFound()
 {
-	std::cout << "RL.Size" << RL.size() << std::endl;
+	//std::cout << "RL.Size" << RL.size() << std::endl;
 	int v = RL.size();
 	for (auto &xxx : RL)
 	{
@@ -1198,7 +1284,7 @@ int RuinesMap::AFP(Body*rhs)	// логика лучника.
 		else if (xx < 0 && yy == 0 && CheckDir(6, rhs) != 0)Shot(rhs, 6);
 		else if (xx < 0 && yy > 0 && CheckDir(7, rhs) != 0)Shot(rhs, 7);
 		else if (Scaner(rhs, 1)){ Move(MyHero->cx, MyHero->cy, rhs); }
-		else { std::cout << "AIPF next" << std::endl; AIPF(rhs); }
+		else { /*std::cout << "AIPF next" << std::endl;*/ AIPF(rhs); }
 	}
 
 	else if (ShotMap[rhs->cx][rhs->cy + 1] == 1 && levelSize[rhs->cx][rhs->cy + 1] == 0)Move(rhs->cx, rhs->cy + 1, rhs);
@@ -1209,7 +1295,7 @@ int RuinesMap::AFP(Body*rhs)	// логика лучника.
 	else if (ShotMap[rhs->cx - 1][rhs->cy - 1] == 1 && levelSize[rhs->cx - 1][rhs->cy - 1])Move(rhs->cx - 1, rhs->cy - 1, rhs);
 	else if (ShotMap[rhs->cx - 1][rhs->cy] == 1 && levelSize[rhs->cx - 1][rhs->cy])Move(rhs->cx - 1, rhs->cy, rhs);
 	else if (ShotMap[rhs->cx - 1][rhs->cy + 1] == 1 && levelSize[rhs->cx - 1][rhs->cy + 1])Move(rhs->cx - 1, rhs->cy + 1, rhs);
-	else { std::cout << "AIPF next" << std::endl; AIPF(rhs); }
+	else {  /*std::cout << "AIPF next" << std::endl;*/ AIPF(rhs); }
 
 	return 0;
 }

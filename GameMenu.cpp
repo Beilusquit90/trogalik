@@ -40,8 +40,10 @@ void GameMenu::Keyboard(unsigned char keyx, int x, int y)
 
 void GameMenu::Draw()
 {
+	//std::cout << "DrawMenu" << std::endl;
 	glBindTexture(GL_TEXTURE_2D, tails.textures[7]);
 	glBegin(GL_QUADS);
+	glColor3f(1, 1, 1);
 	glTexCoord2f(0.0, 0.0); glVertex2f(0, 0);
 	glTexCoord2f(0.0, 1.0); glVertex2f(0 ,800);
 	glTexCoord2f(1.0, 1.0); glVertex2f(800,800);
