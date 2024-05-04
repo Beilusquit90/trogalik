@@ -116,6 +116,7 @@
 (^|\.)\w*gmail\w*\.\w*$
 (^|\.)\w*google\w*\.\w*$
 (^|\.)\w*instagram\w*\.\w*$
+(^|\.)\w*github\w*\.\w*$
 (^|\.)\w*porn\w*\.\w*$
 (^|\.)\w*sci-hub\w*\.\w*$
 (^|\.)\w*spotify\w*\.\w*$
@@ -2677,6 +2678,7 @@
 (^|\.)insecam\.org$
 (^|\.)insidevoa\.com$
 (^|\.)instagram\.com$
+(^|\.)github\.com$
 (^|\.)instanthq\.com$
 (^|\.)institut-tibetain\.org$
 (^|\.)internet\.org$
