@@ -19,6 +19,7 @@
 [proxy_list]
 
 # MyList
+(^|\.)github\.com$
 (^|\.)apkmirror\.com$
 (^|\.)tradingview\.com$
 (^|\.)sednax\.com$
